@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'clinicaEstetica'
+    'clinicaEstetica',
+    'administrador'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,8 @@ ROOT_URLCONF = 'clinicaConfig.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'clinicaEstetica',
+                 BASE_DIR / 'administrador/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,7 +122,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = 'staticfiles'
 STATIC_DIRS = [
-    os.path.join(BASE_DIR, 'clinicaEstetica/static')
+    os.path.join(BASE_DIR, 'clinicaEstetica/static'),
+    os.path.join(BASE_DIR, 'administrador/static'),
 ]
 
 # Default primary key field type
