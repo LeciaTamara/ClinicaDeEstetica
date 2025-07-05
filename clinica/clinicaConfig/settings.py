@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'clinicaEstetica',
-    'administrador'
+    'administrador',
+    'cliente',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'clinicaEstetica',
-                 BASE_DIR / 'administrador/templates'],
+                 BASE_DIR / 'administrador/templates',
+                 BASE_DIR / 'cliente/templates',
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

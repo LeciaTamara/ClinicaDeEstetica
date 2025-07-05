@@ -35,23 +35,24 @@
     <body>
 
         <!-- Spinner Start -->
-        <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+        <!-- <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
             <div class="spinner-grow text-primary" role="status"></div>
-        </div>
+        </div> -->
         <!-- Spinner End -->
 
 
         <!-- Navbar start -->
         <div class="container-fluid sticky-top px-0">
-            {% include 'clinicaEstetica/__topbar.html' %}
+            {% include 'cliente/__topbar.html' %}
 
-            {% include 'clinicaEstetica/__navbar.html' %}
-            
+            {% include 'cliente/__navbar.html' %}
             
         </div>
         <!-- Navbar End -->
 
+        {% block content %}
 
+        {% endblock %}
         <!-- Modal Search Start -->
          <!-- {% include 'clinicaEstetica/__modalSearch.html' %} -->
         
@@ -111,7 +112,7 @@
 
 
         <!-- Contact Start -->
-         {% include 'clinicaEstetica/__contactStart.html' %}
+         <!-- {% include 'cliente/__contactStart.html' %} -->
         
         <!-- Contact End -->
 
@@ -119,8 +120,7 @@
 
         <!-- Footer Start -->
         <div class="container-fluid footer py-5">
-            {% include 'clinicaEstetica/__footer.html' %}
-            
+            {% include 'cliente/__footer.html' %}
             
         </div>
         <!-- Footer End -->
