@@ -1,0 +1,9 @@
+/*Estilo do formulário da página HTML cadastrar Administrador*/
+#formulario label {
+    color: white;
+    font-weight: bold;
+}
+
+#formulario li{
+    color: #fa043c;
+}

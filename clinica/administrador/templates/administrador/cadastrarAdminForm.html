@@ -1,12 +1,16 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<form method="POST" action="">
-    {% csrf_token %}
 
-    {{ form }}
+<div class="d-flex justify-content-center align-items-center">
+    <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
+        {% csrf_token %}
 
-    <button type="submit">Salvar</button>
-</form>
+        {{ form }}
+    
+        <button type="submit">Salvar</button>
+    </form>
+</div>
+
 
 {% endblock %}
