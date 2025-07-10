@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div>
+    <button type="button" onclick="window.location.href='/servico/addServico'">Adicionar Servico</button>
+</div>
+
+<div>
+    <button type="button" onclick="window.location.href='/servico/alterarServico/<int:id>'">Atualizar Informções do
+        Servico</button>
+</div>
+
+<div>
+    <button type="button" onclick="window.location.href='/servico/deletarServico/<int:id>'">Deletar
+        Servico</button>
+</div>
+{% endblock %}
