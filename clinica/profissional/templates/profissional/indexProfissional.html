@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div>
+    <button type="button" onclick="window.location.href='/profissional/mostrardetalhes/<str:username>'">Ver informações</button>
+</div>
+
+<div>
+    <button type="button" onclick="window.location.href='/profissional/alterarInformacao/<int:id>'">Atualizar Informções</button>
+</div>
+
+<table border="2">
+    <tr>
+       <td id="nome" class="table-danger">Nome</td>
+        <td id="nome" class="table-danger">Username</td>
+        <td id="experiência" class="table-danger">Experiência</td>
+    </tr>
+
+    <tbody class="table-group-divider">
+        {%for profissional in profissionais%}
+        <tr>
+            <td class="table-danger">{{profissional.id}}</td>
+            <td class="table-danger">{{profissional.nome}}</td>
+            <td class="table-danger">{{profissional.username}}</td>
+            <td class="table-danger">{{profissional.especializacao}}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

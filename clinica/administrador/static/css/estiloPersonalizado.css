@@ -2,8 +2,13 @@
 #formulario label {
     color: white;
     font-weight: bold;
+    padding-top: 15px;
 }
 
 #formulario li{
+    color: #fa043c;
+}
+
+#formulario div{
     color: #fa043c;
 }

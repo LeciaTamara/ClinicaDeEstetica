@@ -67,7 +67,7 @@
                 <div class="container px-0">
                     <nav class="navbar navbar-light navbar-expand-xl">
                         <a href="index.html" class="navbar-brand">
-                            <h1 class="text-primary display-4">Sparlex</h1>
+                            <h1 class="text-primary display-4">{{ dadosClinica.nome }}</h1>
                         </a>
                         <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="fa fa-bars text-primary"></span>
@@ -75,7 +75,7 @@
                         <div class="collapse navbar-collapse bg-light py-3" id="navbarCollapse">
                             <div class="navbar-nav mx-auto border-top">
                                 <a href="index.html" class="nav-item nav-link">Home</a>
-                                <a href="about.html" class="nav-item nav-link">About</a>
+                                <a href="{% url 'mostrarSobre' %}" class="nav-item nav-link">About</a>
                                 <a href="service.html" class="nav-item nav-link active">Services</a>
                                 <a href="price.html" class="nav-item nav-link">Price</a>
                                 <div class="nav-item dropdown">

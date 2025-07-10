@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'clinicaEstetica',
     'administrador',
     'cliente',
+    'profissional',
 ]
 
 MIDDLEWARE = [
