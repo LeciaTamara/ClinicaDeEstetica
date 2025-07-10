@@ -130,7 +130,8 @@ STATIC_DIRS = [
     os.path.join(BASE_DIR, 'clinicaEstetica/static'),
     os.path.join(BASE_DIR, 'administrador/static'),
 ]
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

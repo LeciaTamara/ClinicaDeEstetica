@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="d-flex justify-content-center align-items-center">
-    <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
+    <form method="POST" action="" enctype="multipart/form-data" class="p-4 bg-info rounded shadow-sm" id="formulario">
         {% csrf_token %}
 
         {{ formServico }}
