@@ -5,17 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import Profissional
 
-class ProfissionalForm(UserCreationForm):
+#Criar o profissional
+class ProfissionalForm(forms.ModelForm):
     class Meta:
         model = Profissional
-        fields = ['nome', 'username', 'endereco', 'especializacao', 'numTelefone', 'salario']
-
+        fields = ['nome', 'endereco', 'especializacao', 'numTelefone', 'salario']
         widgets = {
             'nome': forms.TextInput(attrs={
                 'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Nome'}),
-
-            'username': forms.TextInput(attrs={
-                'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Username'}),
 
             'endereco': forms.TextInput(attrs={
                 'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'endereco'}),
@@ -31,20 +28,20 @@ class ProfissionalForm(UserCreationForm):
                 'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Informe salário'}),
         }
     
-    #Adiciona estilos nos campos da senha
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['password1'].widget.attrs.update({
-            'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Senha'})
-        self.fields['password2'].widget.attrs.update({
-            'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Confirme a senha'})
+    # #Adiciona estilos nos campos da senha
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['password1'].widget.attrs.update({
+    #         'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Senha'})
+    #     self.fields['password2'].widget.attrs.update({
+    #         'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Confirme a senha'})
 
 
 '''formulário para atualizar as informações de funcionário'''
 class EditProfissionalForm(forms.ModelForm):
     class Meta:
         model = Profissional
-        fields = ['username', 'endereco', 'especializacao', 'numTelefone']
+        fields = ['endereco', 'especializacao', 'numTelefone']
 
         widgets = {
             'username': forms.TextInput(attrs={

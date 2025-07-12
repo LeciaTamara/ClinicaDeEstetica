@@ -5,7 +5,20 @@
 <div class="d-flex justify-content-center align-items-center">
     <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
         {% csrf_token %}
+        
+        {% if form_user.errors %}
+            <div class="alert alert-danger">
+                {{ form_user.errors }}
+            </div>
+        {% endif %}
 
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        {{form_user}}
         {{ form }}
     
         <button type="submit">Salvar</button>

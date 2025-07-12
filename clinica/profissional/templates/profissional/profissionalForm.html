@@ -5,8 +5,8 @@
 <div class="d-flex justify-content-center align-items-center">
     <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
         {% csrf_token %}
-
-        {{ formProfissional }}
+        {{form_user}}
+        {{ form }}
 
         <button type="submit">Salvar</button>
     </form>
