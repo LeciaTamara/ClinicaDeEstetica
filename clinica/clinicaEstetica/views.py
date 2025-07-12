@@ -1,11 +1,19 @@
 from django.shortcuts import redirect, render
 
+from servico.utils import mostrarCategoria, mostrarServico
 from clinicaEstetica.models import Clinica
 from clinicaEstetica.forms import ClinicaForm, EditClinicaForm
 
 # Create your views here.
+# Essa view chama e retorna a view mostrarCategoria de servico
 def index(request):
-    return render(request, 'clinicaEstetica/indexClinica.html')
+    # Essa linha retorna os dados da view mostrarCategoria para o indexClinica
+    # Onde está a palavra templateDestino tem que ser o mesmo none definido na
+    # view de mostrarCategoria em servio, mudando só o caminho para onde vai os dados
+    servicos = {}
+    servicos.update(mostrarCategoria())
+    servicos.update(mostrarServico())
+    return render(request,'clinicaEstetica/indexClinica.html', servicos)
 
 # Adicionar Irformações sobre a clínica
 

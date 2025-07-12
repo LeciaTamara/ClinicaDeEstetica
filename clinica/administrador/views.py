@@ -3,15 +3,13 @@ from django.contrib.auth.models import User
 from administrador.forms import AdministradorForm
 from django.contrib import messages
 
-
-
 # Create your views here.
 
 
 #Index de administrador
 
 def index (request):
-    return render(request, 'administrador/indexClinica.html')
+    return render(request, 'administrador/indexAdministrador.html')
 
 
 # Adicionar administrador

@@ -64,6 +64,7 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'clinicaEstetica',
                  BASE_DIR / 'administrador/templates',
                  BASE_DIR / 'cliente/templates',
+                 BASE_DIR / 'servico/templates',
                  ],
         'APP_DIRS': True,
         'OPTIONS': {

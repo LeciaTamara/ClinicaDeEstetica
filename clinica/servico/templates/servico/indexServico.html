@@ -14,4 +14,24 @@
     <button type="button" onclick="window.location.href='/servico/deletarServico/<int:id>'">Deletar
         Servico</button>
 </div>
+
+<div>
+    <button type="button" onclick="window.location.href='/servico/addCategoria/'">Adicionar tipos de servicos</button>
+</div>
+
+<div>
+    <button type="button" onclick="window.location.href='/servico/alterarCategoria/<int:id>/'">Alterar categoria</button>
+</div>
+
+<div>
+    <button type="button" onclick="window.location.href='/servico/deletarCategoria/<int:id>/'">Deletar categoria</button>
+</div>
+
+<div class="container-fluid carousel-header px-0">
+    {% include 'servico/__carouselStart.html' %}
+</div>
+
+<div class="container-fluid carousel-header px-0">
+    {% include 'servico/__servicesStart.html' %}
+</div>
 {% endblock %}
