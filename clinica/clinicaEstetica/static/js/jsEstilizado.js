@@ -1,3 +1,7 @@
+//função javaScrip que chama a view mostrarServicos
+//essa função utiliza o ajax por meio do fetch para 
+//mostrar mais serviços sem que o usuário seja redireciondo
+//para outra página
 document.addEventListener("DOMContentLoaded", function(){
     const botao = document.getElementById("mostrarMais");
     if(botao){
