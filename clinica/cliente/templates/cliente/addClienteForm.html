@@ -1,17 +1,15 @@
-{% extends 'index.html' %}
+{% extends 'indexFormCliente.html' %}
 
 {% block content %}
-
-<div class="d-flex justify-content-center align-items-center"></div>
-    <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
-
-        {% csrf_token %}
-            {{form_user}}
-            {{form}}
-            {{editarUserForm}}
-            {{editarClienteForm}}
-            <button type="submit" class="btn btn-primary m-3 p-3"cd>Salvar</button>
-
-    </form>
+<div class="d-flex justify-content-center align-items-center m-3">
 </div>
+
+<form method="POST" action="" class="p-4 bg-info rounded shadow-sm mb-5 pe-5" id="formulario">
+    {% csrf_token %}
+    {{ form_user }}
+    {{ form }}
+    {{ editarUserForm }}
+    {{ editarClienteForm }}
+    <button type="submit" class="btn btn-primary m-3 p-3">Salvar</button>
+</form>
 {% endblock %}
