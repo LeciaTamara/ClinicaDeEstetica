@@ -12,3 +12,31 @@
 #formulario div{
     color: #fa043c;
 }
+
+/*Estilizando o sidebar*/
+#sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  transition: left 0.3s ease;
+  background-color: #007bff;
+  overflow-y: auto;
+}
+
+/* Esconde a sidebar por padrão em telas menores */
+@media (max-width: 768px) {
+  #sidebar {
+    left: -250px;
+  }
+
+  /* Se togglado via botão, reaparece */
+  #wrapper.toggled #sidebar {
+    left: 0;
+  }
+}
+
+
+
