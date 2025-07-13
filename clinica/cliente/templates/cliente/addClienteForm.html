@@ -2,13 +2,16 @@
 
 {% block content %}
 
-<form method="POST" action="">
+<div class="d-flex justify-content-center align-items-center"></div>
+    <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
 
-    {% csrf_token %}
-        {{form_user}}
-        {{form}}
-        <button type="submit">Salvar</button>
+        {% csrf_token %}
+            {{form_user}}
+            {{form}}
+            {{editarUserForm}}
+            {{editarClienteForm}}
+            <button type="submit" class="btn btn-primary m-3 p-3"cd>Salvar</button>
 
-</form>
-
+    </form>
+</div>
 {% endblock %}

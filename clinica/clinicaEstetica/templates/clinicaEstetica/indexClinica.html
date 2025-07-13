@@ -1,14 +1,13 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div>
+<!-- <div>
     <button type="button" onclick="window.location.href='/clinicaEstetica/addClinica'">Adicionar Informções da Clinica</button>
 </div>
 
 <div>
-    <button type="button" onclick="window.location.href='/clinicaEstetica/atualizarClinica'">Atualizar Informções da
-        Clinica</button>
-</div>
+    <button type="button" onclick="window.location.href='/clinicaEstetica/atualizarClinica'">Atualizar Informções da Clinica</button>
+</div> -->
 
 <div class="container-fluid carousel-header px-0">
     {% include 'clinicaEstetica/__carouselStart.html' %}
@@ -16,7 +15,8 @@
 
 <div class="container-fluid carousel-header px-0">
     {% include 'clinicaEstetica/__servicesStart.html' %}
-<div>
+</div>
+<div class="container-fluid carousel-header px-0" >
     <button type="button" onclick="window.location.href='/clinicaEstetica/login'">Entrar</button>
 </div>
 {% endblock %}
