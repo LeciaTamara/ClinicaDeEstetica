@@ -14,4 +14,5 @@ urlpatterns = [
     path('redirecionarParaCliente/', views.redirecionarParaCliente, name='redirecionarParaCliente'),
     path('redirecionaParaProfissional/', views.redirecionaParaProfissional, name="redirecionaParaProfissional"),
     path("mostrarServicos/", views.mostrarServicos, name="mostrarServicos"),
+    path("mostrarPlano/", views.mostrarPlano, name="mostrarPlano")
 ]
