@@ -3,12 +3,13 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-
+from clinicaEstetica.forms import AdicionarUsuarioForm
 from profissional.models import Profissional
 from profissional.forms import EditProfissionalForm, ProfissionalForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required()
 def index(request):
      profissionais = Profissional.objects.all()
      usuario = User.objects.all()
@@ -21,18 +22,30 @@ def index(request):
      return render(request, 'profissional/indexProfissional.html', contexto)
 
 #criar profissional
-
-def criarProfissional(request):
-    formProfissional = ProfissionalForm(request.POST)
-
-    if formProfissional.is_valid():
-        profissional = formProfissional.save(commit=False)
+def add_profissional(request):
+    form_user = AdicionarUsuarioForm(request.POST or None)
+    form = ProfissionalForm(request.POST or None)
+    if form_user.is_valid() and form.is_valid():
+        user_profissional = form_user.save()
+        profissional = form.save(commit=False)
+        profissional.user = user_profissional
+        profissional.identificador = 'profissional'
         profissional.save()
+        return redirect('indexProfissional')
+    return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
-        #redireciona para a página inicial do Admin
-        return redirect(reverse('indexAdm'))
 
-    return render(request, 'profissional/profissionalForm.html', {'formProfissional': formProfissional})
+# def criarProfissional(request):
+#     formProfissional = ProfissionalForm(request.POST)
+
+#     if formProfissional.is_valid():
+#         profissional = formProfissional.save(commit=False)
+#         profissional.save()
+
+#         #redireciona para a página inicial do Admin
+#         return redirect(reverse('indexAdm'))
+
+#     return render(request, 'profissional/profissionalForm.html', {'formProfissional': formProfissional})
 
 
 # Mostrar detalhes

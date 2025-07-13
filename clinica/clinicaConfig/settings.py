@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'cliente',
     'profissional',
     'servico',
+    'plano',
 ]
 
 MIDDLEWARE = [
@@ -138,4 +139,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/clinicaEstetica/index'
+LOGIN_REDIRECT_URL = '/administrador/index'
+LOGIN_REDIRECT_URL = '/cliente/index'
+LOGIN_REDIRECT_URL = '/profissional/index'
+LOGIN_REDIRECT_URL = '/servico/index'
+LOGIN_REDIRECT_URL = '/accounts/login/'
