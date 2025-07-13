@@ -1,14 +1,6 @@
-{% extends 'index.html' %}
+{% extends 'indexClt.html' %}
 
 {% block content %}
 <p>Usuário logado: {{ user.username }}</p>
-
-
-<div>
-    <button type="button" onclick="window.location.href='/cliente/adicionarCliente'">Adicionar cliente</button>
-</div>
-<div>
-    <button type="button" onclick="window.location.href='/cliente/editar/{{user.username}}'">Edita Perfil</button>
-</div>
 
 {% endblock %}

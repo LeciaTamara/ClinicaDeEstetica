@@ -29,14 +29,12 @@ def add_cliente(request):
 
 #Read com condição
 @login_required
-def detalhes(request, username):
-    cliente = Cliente.objects.get(nomeUsuario=username)
+def verPrfil(request, username):
+    cliente = Cliente.objects.get(user__username=username)
+    userCliente = cliente.user
 
-#Update
+    return render(request, 'cliente/verPerfil.html', {'user' : userCliente, 'cliente' : cliente})
 
-# def editarDadosCliente(request):
-#     username = request.user.username
-#     return redirect('editar', username=username)
 
 #Update
 @login_required
@@ -55,28 +53,12 @@ def editarDadosCliente(request, username):
 
     return render(request, 'cliente/addClienteForm.html', {'editarUserForm' : editarUserForm, 'editarClienteForm' : editarClienteForm, 'cliente' : cliente} )
 
-#Update
-# @login_required
-# def editarDadosCliente(request, username):
-#     if request.method == 'GET':
-#         clientes = Cliente.objects.all()
-#         cliente = Cliente.objects.filter(user__username=username).first()
-#         editarClienteFormForm = EditClienteForm(instance=cliente)
 
-#         print(clientes)
-#         print(editarClienteFormForm)
+#Delete
+def deletarContaCliente(request, username):
+    apagarCliente = get_object_or_404(Cliente, user__username=username)
 
-#         return render(request, 'cliente/addClienteForm.html', {'editarClienteFormForm' : editarClienteFormForm, 'clientes' : clientes, 'cliente' : cliente})
-    
-#     elif request.method == 'POST':
-#         clientes = Cliente.objects.all()
-#         cliente = Cliente.objects.get(user__username=username)
-#         editarClienteFormForm = EditClienteForm(request.POST, instance=cliente)
-
-#         if editarClienteFormForm.is_valid():
-#             editarClienteFormForm.save()
-
-#             return redirect('indexCliente')
-#         else:
-#             clientes = Cliente.objects.all()
-#             return render(request, 'cliente/addClienteForm.html', {'editarClienteFormForm' : editarClienteFormForm, 'clientes' : clientes, 'cliente' : cliente})
+    clienteUser = apagarCliente.user
+    apagarCliente.delete()
+    clienteUser.delete()
+    return redirect('indexClinica')
