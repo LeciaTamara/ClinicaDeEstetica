@@ -7,7 +7,8 @@ def addPlano(request):
 
     if formPlano.is_valid():
         plano = formPlano.save(commit=False)
-        plano.save_m2m()
+        plano.save()
+        formPlano.save_m2m()
         return redirect('indexPlano')
     return render(request, 'plano/planoForm.html',{'formPlano': formPlano})
 

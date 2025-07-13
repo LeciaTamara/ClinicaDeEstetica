@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
+from plano.utils import visualizarPlano
 from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
 from clinicaEstetica.models import Clinica
 from clinicaEstetica.forms import ClinicaForm, EditClinicaForm
@@ -25,6 +26,12 @@ def mostrarServicos(request):
     servicos = {}
     servicos.update(mostrarMaisServicos())
     return render(request, 'clinicaEstetica/__todosServicos.html', servicos)
+
+# mostrar planos
+def mostrarPlano(request):
+    planos = {}
+    planos.update(visualizarPlano())
+    return render(request, 'clinicaEstetica/__pricingStart.html', planos)
 
 # Adicionar Irformações sobre a clínica
 def addClinica(request):
