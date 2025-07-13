@@ -11,6 +11,19 @@ class AdicionarUsuarioForm(UserCreationForm):
         model = User 
         fields = ['username','email', 'password1', 'password2']
 
+        '''estilizandp com bootstrap direto no forms.py'''
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Nome de usuário'}),
+
+            'email': forms.EmailInput(attrs={
+                 'class': 'form-control py-3 border-white bg-transparent text-white w-50 mt-3','placeholder': 'Endereço de email'})
+        }
+
+        help_texts = {
+            'username': ''
+        }
+
         #Adiciona estilos nos campos da senha
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,7 +32,26 @@ class AdicionarUsuarioForm(UserCreationForm):
        
         self.fields['password2'].widget.attrs.update({
             'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Confirme a senha'})
+        
+        self.fields['password2'].help_text = ''
 
+class EditUsuarioForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','email']
+
+        '''estilizandp com bootstrap direto no forms.py'''
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Nome de usuário'}),
+
+            'email': forms.EmailInput(attrs={
+                 'class': 'form-control py-3 border-white bg-transparent text-white w-50 mt-3','placeholder': 'Endereço de email'})
+        }
+
+        help_texts = {
+            'username': ''
+        }
 
 #Criar clínica
 class ClinicaForm(forms.ModelForm):
