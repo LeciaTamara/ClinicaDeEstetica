@@ -1,4 +1,8 @@
 from servico.models import Servico, TipoServico
+# Arquivo util.py utilizado para criar funçoes que são utilizadas em outros apps
+# com no app clinicaEstetica.
+
+# Essas funçõe são todas utilizadas no app clinica Estetica
 
 # mostra as categorias de cada servico
 def mostrarCategoria():
@@ -16,13 +20,13 @@ def mostrarCategoria():
             servicoPorCategoria[categoria] = servico
     return {'servicoPorCategoria': servicoPorCategoria}
 
-# mostrar serviço
+# mostrar os dados do serviço
 def mostrarServico():
-    verServicos = Servico.objects.values_list('servico', flat=True)
-    armazenaServico = {}
-    
-    for servico in verServicos:
-        servicoPrestado = Servico.objects.filter(servico=servico).first()
-        if servicoPrestado:
-            armazenaServico[servico] = servicoPrestado
+    armazenaServico = Servico.objects.all()
     return {'armazenaServico': armazenaServico}
+
+# mostrar os serviços exibidos depois de clicar no botão mostrar mais 
+def mostrarMaisServicos():
+    servico = Servico.objects.all()[8:]
+    #retorna um dicionário
+    return {'armazenaServico': servico}

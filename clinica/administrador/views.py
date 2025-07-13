@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 #Index de administrador
-login_required()
+@login_required()
 def index (request):
     return render(request, 'administrador/indexAdministrador.html')
 

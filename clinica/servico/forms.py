@@ -42,7 +42,7 @@ class EditCategoriaForm(forms.ModelForm):
 class ServicoForm(forms.ModelForm):
     class Meta:
         model = Servico
-        fields = ['tipo', 'servico', 'preco', 'profissional', 'arquivo']
+        fields = ['tipo', 'servico', 'preco', 'profissional', 'descricao', 'arquivo']
 
         widgets = {
             'servico': forms.TextInput(attrs={
@@ -50,6 +50,9 @@ class ServicoForm(forms.ModelForm):
 
             'preco': forms.NumberInput(attrs={
                 'class': 'form-control py border-white bg transparent text-black w-50', 'placeholder': 'Preco'}),
+
+            'descricao' : forms.Textarea(attrs={
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50','rows' : 6, 'cols' : 50, 'placeholder': 'Especialização'}),
             
             'arquivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
@@ -62,7 +65,7 @@ class ServicoForm(forms.ModelForm):
 class EditServicoForm(forms.ModelForm):
     class Meta:
         model = Servico
-        fields = ['tipo', 'servico', 'preco', 'profissional', 'arquivo']
+        fields = ['tipo', 'servico', 'preco', 'profissional', 'descricao', 'arquivo']
 
         widgets = {
             'tipo':forms.TextInput(attrs={
@@ -73,6 +76,9 @@ class EditServicoForm(forms.ModelForm):
             
             'preco': forms.NumberInput(attrs={
                 'class': 'form-control py border-white bg transparent text-black w-50', 'placeholder': 'Preco'}),
+
+            'descricao' : forms.Textarea(attrs={
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50','rows' : 6, 'cols' : 50, 'placeholder': 'Especialização'}),
 
             'arquivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }

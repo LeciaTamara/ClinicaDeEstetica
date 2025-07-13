@@ -4,12 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from servico.utils import mostrarCategoria, mostrarServico
+from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
 from clinicaEstetica.models import Clinica
 from clinicaEstetica.forms import ClinicaForm, EditClinicaForm
 
 # Create your views here.
-# Essa view chama e retorna a view mostrarCategoria de servico
+# Essa view chama e retorna a view Categoria e servico
 def index(request):
     # Essa linha retorna os dados da view mostrarCategoria para o indexClinica
     # Onde está a palavra templateDestino tem que ser o mesmo none definido na
@@ -19,8 +19,14 @@ def index(request):
     servicos.update(mostrarServico())
     return render(request,'clinicaEstetica/indexClinica.html', servicos)
 
-# Adicionar Irformações sobre a clínica
+# mostrar os serviços restantes ao clicar no botão mostrar mais serviços no
+# índice de clinicaEstetica
+def mostrarServicos(request):
+    servicos = {}
+    servicos.update(mostrarMaisServicos())
+    return render(request, 'clinicaEstetica/__todosServicos.html', servicos)
 
+# Adicionar Irformações sobre a clínica
 def addClinica(request):
     formClinica = ClinicaForm(request.POST)
 

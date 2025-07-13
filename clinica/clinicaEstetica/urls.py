@@ -12,5 +12,6 @@ urlpatterns = [
     path("login/", views.login_usuario, name="login"), 
     path('redirecionarParaAdministrador/', views.redirecionarParaAdministrador, name='redirecionarParaAdministrador'), 
     path('redirecionarParaCliente/', views.redirecionarParaCliente, name='redirecionarParaCliente'),
-    path('redirecionaParaProfissional/', views.redirecionaParaProfissional, name="redirecionaParaProfissional")
+    path('redirecionaParaProfissional/', views.redirecionaParaProfissional, name="redirecionaParaProfissional"),
+    path("mostrarServicos/", views.mostrarServicos, name="mostrarServicos"),
 ]
