@@ -9,7 +9,7 @@ class PlanoForm(forms.ModelForm):
     #criar o campo com mutiplas seleções
     servico = forms.ModelMultipleChoiceField(
         queryset=Servico.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'select-multiple'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'select-multiple'})
     )
     class Meta:
         model = Plano
