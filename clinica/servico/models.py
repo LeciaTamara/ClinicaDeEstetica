@@ -13,4 +13,5 @@ class Servico(models.Model):
     servico = models.TextField(max_length=100)
     preco = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='preco')       
     profissional = models.ForeignKey('profissional.Profissional', on_delete=models.CASCADE)
+    descricao = models.TextField(max_length=200)
     arquivo = models.FileField(upload_to="img")

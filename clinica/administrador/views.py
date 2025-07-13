@@ -3,15 +3,12 @@ from django.contrib.auth.models import User
 from administrador.forms import AdministradorForm
 from clinicaEstetica.forms import AdicionarUsuarioForm
 from django.contrib import messages
-<<<<<<< HEAD
-=======
 from django.contrib.auth.decorators import login_required
->>>>>>> 44e2494c0968c951a2d5c64ec1896f8815ae5033
 
 # Create your views here.
 
 #Index de administrador
-login_required()
+@login_required()
 def index (request):
     return render(request, 'administrador/indexAdministrador.html')
 
