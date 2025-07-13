@@ -7,7 +7,7 @@ def addPlano(request):
 
     if formPlano.is_valid():
         plano = formPlano.save(commit=False)
-        plano.save()
+        plano.save_m2m()
         return redirect('indexPlano')
     return render(request, 'plano/planoForm.html',{'formPlano': formPlano})
 
@@ -27,12 +27,12 @@ def alterarPlano(request, id):
         plano = Plano.objects.get(pk=id)
         formPlano = EditPlanoForm(request.POST,instance=plano)
 
-    if formPlano.is_valid():
-       formPlano.save()
-       return redirect('indexPlano')
-    else:
-       planos = Plano.objects.all()
-       return render(request, 'plano/planoForm.html')
+        if formPlano.is_valid():
+            formPlano.save()
+            return redirect('indexPlano')
+        else:
+            planos = Plano.objects.all()
+            return render(request, 'plano/planoForm.html')
 
 def deletarPlano(request, id):
     form = Plano.objects.get(pk=id)

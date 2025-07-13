@@ -15,3 +15,6 @@ class Servico(models.Model):
     profissional = models.ForeignKey('profissional.Profissional', on_delete=models.CASCADE)
     descricao = models.TextField(max_length=200)
     arquivo = models.FileField(upload_to="img")
+
+    def __str__(self):
+        return f'{self.servico}'
