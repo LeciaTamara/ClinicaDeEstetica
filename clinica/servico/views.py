@@ -1,18 +1,86 @@
+from queue import Full
 from django.shortcuts import redirect, render
-from servico.models import Servico
-from servico.forms import EditServicoForm, ServicoForm
+from servico.models import Servico, TipoServico
+from servico.forms import EditCategoriaForm, EditServicoForm, ServicoCategoriaForm, ServicoForm
+from django.db.models import Max
+from django.db.models import Subquery, OuterRef
 
+def index(request):
+    servicos = Servico.objects.all()
+
+    # categorias = Servico.objects.values_list('categoria', flat=True).distinct()
+    # servicoPorCategoria = {}
+
+    # for categoria in categorias:
+    #     servico = Servico.objects.filter(categoria=categoria).first()
+    #     if servico:
+    #         servicoPorCategoria[categoria] = servico
+    return render(request, 'servico/indexServico.html', {'servicos': servicos})
+
+#Adicionar Categoria de serviço
+def addCategoria(request):
+    formServico = ServicoCategoriaForm(request.POST, request.FILES)
+    print(formServico.errors)
+
+    if formServico.is_valid():
+        categoriaServico = formServico.save(commit=False)
+        categoriaServico.save()
+        return redirect('indexServico')
+    return render(request, 'servico/servicoForm.html', {'formServico' :formServico})
+
+# mostra as categorias de cada servico
+# Ela tem como argumento o request, o template = '', que permite que
+# a ela ser chamada em outros apps e exibir essas informações.
+# def mostrarCategoria():
+#     # Essa linha retorna para a variavél categorias os valores do atrbuto
+#     # categoria, onde flat=True tranforma os valores retornados pela a lista
+#     # em uma lista simples, e o distinc não permite que valores iguais entre
+#     # na lista.
+#     categorias = TipoServico.objects.values_list('categoria', flat=True).distinct()
+#     # Essa linha cria um dicionário vázio
+#     servicoPorCategoria = {}
+
+#     for categoria in categorias:
+#         servico = TipoServico.objects.filter(categoria=categoria).first()
+#         if servico:
+#             servicoPorCategoria[categoria] = servico
+#     return {'servicoPorCategoria': servicoPorCategoria}
+
+# Editar Categoria
+def alterarCategoria(request, id):
+    if request.method == 'GET':
+        categorias = TipoServico.objects.all()
+        categoria = TipoServico.objects.filter(pk=id).first()
+        formServico = EditCategoriaForm(instance=categoria)
+        return render(request, 'servico/servicoForm.html', {'formServico': formServico, 'categorias': categorias})
+    elif request.method == 'POST':
+        categorias = TipoServico.objects.all()
+        categoria = TipoServico.objects.get(pk=id)
+        formServico = EditCategoriaForm(request.POST, request.FILES, instance=categoria)
+
+        if formServico.is_valid():
+            formServico.save()
+            return redirect('indexServico')
+        else:
+            categorias = TipoServico.objects.all()
+            return render(request, 'servico/servicoForm.html')
+        
+# Deletar Categoria
+def deletarCategoria(request, id):
+    categoria = TipoServico.objects.get(pk=id)
+    categoria.delete()
+
+
+# Adicionar Serviço
 def addServico(request):
-    formServico = ServicoForm(request.POST)
+    formServico = ServicoForm(request.POST, request.FILES)
 
+    print(formServico.errors)
     if formServico.is_valid():
         servico = formServico.save(commit=False)
         servico.save()
         return redirect('indexServico')
-    return render(request, 'servico/servicoForm.html',{'formServico': formServico})
-
-def index(request):
-    return render(request, 'servico/indexServico.html')
+    return render(request, 'servico/servicoForm.html',{'formServico': formServico})      
 
 def alterarServico(request, id):
     if request.method == 'GET':
@@ -25,17 +93,30 @@ def alterarServico(request, id):
     elif request.method == 'POST':
         servicos = Servico.objects.all()
         servico = Servico.objects.get(pk=id)
-        formServico = EditServicoForm(request.POST,instance=servico)
+        formServico = EditServicoForm(request.POST, request.FILES, instance=servico)
 
-    if formServico.is_valid():
-       formServico.save()
-       return redirect('indexServico')
-    else:
-       servicos = Servico.objects.all()
-       return render(request, 'servico/servicoForm.html')
 
+        if formServico.is_valid():
+            formServico.save()
+            return redirect('indexServico')
+        else:
+            servicos = Servico.objects.all()
+            return render(request, 'servico/servicoForm.html')
+
+#Mostrar Servico
+# def mostrarServico():
+#     verServicos = Servico.objects.values_list('servico', flat=True)
+#     armazenaServico = {}
+    
+#     for servico in verServicos:
+#         servicoPrestado = Servico.objects.filter(servico=servico).first()
+#         if servicoPrestado:
+#             armazenaServico[servico] = servicoPrestado
+#     return {'armazenaServico': armazenaServico}
+
+#Deletar Servico
 def deletarServico(request, id):
-    form = Servico.objects.get(pk=id)
+    servico = Servico.objects.get(pk=id)
 
-    form.delete()
+    servico.delete()
     return redirect('indexServico')

@@ -1,6 +1,16 @@
 from django.db import models
 
+class TipoServico(models.Model):
+    categoria = models.TextField(max_length=100)
+    imagem = models.FileField(upload_to="img_servico")
+
+    def __str__(self):
+        return f'{self.categoria}'
+
 class Servico(models.Model):
-    tipo = models.CharField(max_length=100)
-    preco = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='preco')
+    #related_name: permite acessar todos os serviços na view ou no template
+    tipo = models.ForeignKey(TipoServico, on_delete=models.CASCADE, related_name="tiposServicos")
+    servico = models.TextField(max_length=100)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='preco')       
     profissional = models.ForeignKey('profissional.Profissional', on_delete=models.CASCADE)
+    arquivo = models.FileField(upload_to="img")
