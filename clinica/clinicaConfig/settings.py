@@ -133,6 +133,9 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_DIRS = [
     os.path.join(BASE_DIR, 'clinicaEstetica/static'),
     os.path.join(BASE_DIR, 'administrador/static'),
+    os.path.join(BASE_DIR, 'cliente/static'),
+    os.path.join(BASE_DIR, 'plano/static'),
+    os.path.join(BASE_DIR, 'profissional/static'),
 ]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
 MEDIA_URL = '/media/'

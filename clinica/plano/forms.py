@@ -1,9 +1,16 @@
 from django.forms import ModelForm, fields
 from django import forms
 from django.db import models
+
+from servico.models import Servico
 from .models import Plano
 
 class PlanoForm(forms.ModelForm):
+    #criar o campo com mutiplas seleções
+    servico = forms.ModelMultipleChoiceField(
+        queryset=Servico.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'select-multiple'})
+    )
     class Meta:
         model = Plano
         fields = ['tipo', 'preco', 'servico']
