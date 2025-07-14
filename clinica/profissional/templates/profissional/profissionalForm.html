@@ -6,7 +6,9 @@
     <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
         {% csrf_token %}
         {{form_user}}
-        {{ form }}
+        {{form}}
+        {{editarUserForm}}
+        {{ editarProfissionalForm}}
 
         <button type="submit">Salvar</button>
     </form>
