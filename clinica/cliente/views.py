@@ -1,11 +1,13 @@
 from django.shortcuts import redirect, render
 
 from cliente.models import Cliente
-from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm
+from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm, SenhaForm
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 # Create your views here.
 
@@ -78,3 +80,35 @@ def marcarServico(request):
         return redirect('indexClinica')
     else:
         return render(request, 'cliente/agendarForm.html', {'formCliente': formCliente, 'formAgendaServico': formAgendaServico})
+    
+
+
+#alterar senha do cliente
+def editSenha(request, username):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        verificarUsuario = Cliente.objects.filter(user__username=username).first()
+        if verificarUsuario and request.user.username == verificarUsuario.user.username:
+            if request.method == 'GET':
+                clientes = User.objects.all()
+                cliente= Cliente.objects.filter(user__username=username).first()
+                formSenha = SenhaForm(instance=cliente)
+
+                return render(request, 'cliente/senhaForm.html', {'formSenha' : formSenha ,'clientes': clientes})
+                
+            elif request.method == 'POST':
+                clientes = User.objects.all()
+                cliente = Cliente.objects.get(user__username=username)
+                formSenha = SenhaForm(request.POST, instance=cliente)
+
+                if formSenha.is_valid():
+                    formSenha.save()
+                        
+                    return redirect('indexCliente')
+                else:
+                    pessoas = User.objects.all()
+        
+                    return render(request, 'cliente/senhaForm.html')
+        else:
+            messages.error(request, "Não é possivél alterar a senha de outro usuário")
+            return redirect('indexCliente')

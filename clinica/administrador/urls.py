@@ -5,7 +5,10 @@ from django.urls import path
 urlpatterns = [
     path("index/", views.index, name="indexAdm"),
     path("add/", views.add_administrador, name="add"),
+    path("editarAdministrador/<str:username>/", views.editarDadosAdmin, name="editarAdministrador"),
+    path("deletarAdministrador/<str:username>/", views.deletarContaAdmin, name="deletarAdministrador"),
     path('verAdministrador/', views.verAdministrador, name='verAdministrador'),
+    path('alterarSenha/<str:username>/', views.editSenha, name="alterarSenha"),
     path('verServico/', views.mostrarServicos, name='verServico'),
     path('verProfissional/', views.verProfissional, name='verProfissional'),
     path('verCliente/', views.verCliente, name='verCliente'),

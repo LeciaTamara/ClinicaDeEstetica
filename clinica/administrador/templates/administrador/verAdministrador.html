@@ -20,7 +20,9 @@
         <td>{{ administrador.user.email }}</td>
         <td>{{ administrador.nome }}</td>
         <td class="d-flex justify-content-between">
-            <a href="#"><i class="bi bi-trash3-fill text-danger"></i></a>
+           <a href="/administrador/editarAdministrador/{{user.username}}"><i class="bi bi-pencil-square text-blue"></i></a>  
+          <a href="/administrador/deletarAdministrador/{{user.username}}"><i class="bi bi-trash3-fill text-danger"></i></a>
+          <a href="/administrador/alterarSenha/{{user.username}}"><i class="bi bi-file-lock2-fill"></i>Alterar senha</a>
         </td>
       </tr>
       {% empty %}

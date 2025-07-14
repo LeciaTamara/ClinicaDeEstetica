@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from clinicaEstetica.forms import AdicionarUsuarioForm
 from profissional.models import Profissional
-from profissional.forms import EditProfissionalForm, ProfissionalForm
+from profissional.forms import EditProfissionalForm, ProfissionalForm, SenhaForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -59,3 +59,33 @@ def alterarInformacao(request, id):
         else:
             profissionais = Profissional.objects.all()
             return render(request, 'profissional/profissionalForm.html')
+        
+#Editar senha
+def editSenha(request, username):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        verificarUsuario = Profissional.objects.filter(user__username=username).first()
+        if verificarUsuario and request.user.username == verificarUsuario.user.username:
+            if request.method == 'GET':
+                profissionais = User.objects.all()
+                profissional= Profissional.objects.filter(user__username=username).first()
+                formSenha = SenhaForm(instance=profissional)
+
+                return render(request, 'profissional/senhaForm.html', {'formSenha' : formSenha ,'profissionais': profissionais})
+                
+            elif request.method == 'POST':
+                profissionais = User.objects.all()
+                profissional = Profissional.objects.get(user__username=username)
+                formSenha = SenhaForm(request.POST, instance=profissional)
+
+                if formSenha.is_valid():
+                    formSenha.save()
+                        
+                    return redirect('indexProfissional')
+                else:
+                    pessoas = User.objects.all()
+        
+                    return render(request, 'profissional/senhaForm.html')
+        else:
+            messages.error(request, "Não é possivél alterar a senha de outro usuário")
+            return redirect('indexProfissional')

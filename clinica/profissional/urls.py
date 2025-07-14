@@ -6,4 +6,5 @@ urlpatterns = [
     path("criarProfissional/", views.add_profissional, name="criarProfissional"),
    # path("mostrardetalhes/<str:username>/", views.mostrardetalhes, name="mostrardetalhes")
     path("alterarInformacao/<int:id>/", views.alterarInformacao, name="alterarInformacao"),
+    path('alterarSenha/<str:username>/', views.editSenha, name="alterarSenha"),
 ]

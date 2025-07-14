@@ -1,18 +1,19 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
-from administrador.forms import AdministradorForm
+from administrador.forms import AdministradorForm, EditAdmForm, SenhaForm
 from administrador.models import Administrador
 from profissional.models import Profissional
 from cliente.models import Cliente
 from servico.models import Servico, TipoServico
-from servico.forms import EditCategoriaForm, EditServicoForm, ServicoCategoriaForm, ServicoForm
+from servico.forms import EditCategoriaForm, EditServicoForm
 from servico.forms import EditServicoForm
-from clinicaEstetica.forms import AdicionarUsuarioForm
+from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 
 # Create your views here.
@@ -71,6 +72,63 @@ def tornarAdmin(request, userName):
         messages.success(request, "Usuário promovido a administrador") 
     
     return redirect('indexAdm')
+
+#Update Adm
+@login_required
+def editarDadosAdmin(request, username):
+    administrador = get_object_or_404(Administrador, user__username=username)
+    user = administrador.user
+    
+    editarUserForm = EditUsuarioForm(request.POST, instance=user)
+    editarAdministradorForm = EditAdmForm(request.POST, instance=administrador)
+
+    if request.method == 'POST':
+        if editarUserForm.is_valid() and editarAdministradorForm.is_valid():
+            editarUserForm.save()
+            editarAdministradorForm.save()
+            return redirect('indexAdm')
+
+    return render(request, 'administrador/cadastrarAdminForm.html', {'editarUserForm' : editarUserForm, 'editarAdministradorForm' : editarAdministradorForm, 'Administrador' : administrador} )
+
+
+#Delete Adm
+def deletarContaAdmin(request, username):
+    apagarAdministrador = get_object_or_404(Administrador, user__username=username)
+
+    administradorUser = apagarAdministrador.user
+    apagarAdministrador.delete()
+    administradorUser.delete()
+    return redirect('indexClinica')
+
+#Editar senha
+def editSenha(request, username):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        verificarUsuario = Administrador.objects.filter(user__username=username).first()
+        if verificarUsuario and request.user.username == verificarUsuario.user.username:
+            if request.method == 'GET':
+                administradores = User.objects.all()
+                administrador= Cliente.objects.filter(user__username=username).first()
+                formSenha = SenhaForm(instance=administrador)
+
+                return render(request, 'administrador/senhaForm.html', {'formSenha' : formSenha ,'administradores': administradores})
+                
+            elif request.method == 'POST':
+                administradores = User.objects.all()
+                administrador = Administrador.objects.get(user__username=username)
+                formSenha = SenhaForm(request.POST, instance=administrador)
+
+                if formSenha.is_valid():
+                    formSenha.save()
+                        
+                    return redirect('indexAdm')
+                else:
+                    pessoas = User.objects.all()
+        
+                    return render(request, 'cliente/senhaForm.html')
+        else:
+            messages.error(request, "Não é possivél alterar a senha de outro usuário")
+            return redirect('indexAdm')
 
 #Todos os serviços
 def mostrarServicos(request):
