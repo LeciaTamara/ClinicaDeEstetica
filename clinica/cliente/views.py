@@ -17,7 +17,8 @@ from django.contrib.auth.models import Group
 
 #Read
 def indexCliente(request):
-    return render(request,'cliente/verPerfil.html')
+    contexto = mostrarCategoria()
+    return render(request, 'cliente/indexCliente.html', contexto)
 
 #Adicionar Cliente
 # @permission_required('cliente.add_cliente', raise_exception=True)
@@ -49,6 +50,7 @@ def add_cliente(request):
 def verPerfil(request):
     cliente = get_object_or_404(Cliente, user=request.user)
     return render(request, 'cliente/verPerfil.html', {'cliente': cliente})
+
 @permission_required('cliente.detail_cliente', raise_exception=True)
 def verPrfil(request, username):
     cliente = Cliente.objects.get(user__username=username)
