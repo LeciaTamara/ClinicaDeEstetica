@@ -1,23 +1,17 @@
 
 
 from cliente.models import Cliente
-<<<<<<< HEAD
 from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm
 from servico.utils import mostrarCategoria
-=======
 from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm, SenhaForm
->>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
-<<<<<<< HEAD
 from servico.models import TipoServico
-=======
 from django.contrib.auth import get_user_model, logout
 from django.contrib import messages
 from django.contrib.auth.models import Group
->>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 
 # Create your views here.
 
@@ -36,9 +30,7 @@ def add_cliente(request):
         cliente.user = user_cliente
         cliente.identificador = 'cliente'
         cliente.save()
-<<<<<<< HEAD
         return redirect('verPerfil')
-=======
 
     #Adiciona o usuário ao grupo cliente -----------------------
 
@@ -50,23 +42,19 @@ def add_cliente(request):
     #-----------------------------------------------------------------
 
         return redirect('indexCliente')
->>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
     return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
 
 #Read com condição
 @login_required
-<<<<<<< HEAD
 def verPerfil(request):
     cliente = get_object_or_404(Cliente, user=request.user)
     return render(request, 'cliente/verPerfil.html', {'cliente': cliente})
-=======
 @permission_required('cliente.detail_cliente', raise_exception=True)
 def verPrfil(request, username):
     cliente = Cliente.objects.get(user__username=username)
     userCliente = cliente.user
 
     return render(request, 'cliente/verPerfil.html', {'user' : userCliente, 'cliente' : cliente})
->>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 
 
 #Update
@@ -116,7 +104,6 @@ def marcarServico(request):
         return render(request, 'cliente/agendarForm.html', {'formCliente': formCliente, 'formAgendaServico': formAgendaServico})
     
 
-<<<<<<< HEAD
 # Mostrar fotos de categoria
 def mostrarFotosCategoria(request):
     servicos = {}
@@ -158,7 +145,6 @@ def mostrarCategoria():
         if servico:
             servicoPorCategoria[categoria] = servico
     return {'servicoPorCategoria': servicoPorCategoria}
-=======
 
 #alterar senha do cliente
 @permission_required('cliente.change_cliente', raise_exception=True)
@@ -197,4 +183,3 @@ def editSenha(request, username):
 def realizarLogout(request):
     logout(request)
     return redirect('login')
->>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
