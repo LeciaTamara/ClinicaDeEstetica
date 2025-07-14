@@ -115,14 +115,12 @@ def verProfissional (request):
 # Apagar profissional
 
 @login_required()
-@permission_required('profissional.delete_profissional', raise_exception=True)
 def deletarContaProfissional(request):
     #pega o profissional pelo o username
-    user = request.user
-    profissional= get_object_or_404(Profissional, user = user)
+    apagarProfissional= get_object_or_404(Profissional, user__username =username)
   
-    profissionalUser = profissional.user
-    profissional.delete()
+    profissionalUser = apagarProfissional.user
+    apagarProfissional.delete()
     profissionalUser.delete()
     return redirect('indexProfissional')
 

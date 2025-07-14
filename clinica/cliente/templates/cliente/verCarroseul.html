@@ -1,3 +1,6 @@
+{% extends 'indexCliente.html' %}
+
+{% block content %}
 <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner" role="listbox">
         {% for categoria, servicos in servicoPorCategoria.items %}
@@ -14,3 +17,4 @@
         {% endfor %}
     </div>
 </div>
+{% endblock &}

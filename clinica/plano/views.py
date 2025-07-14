@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from plano.models import Plano
 from plano.forms import EditPlanoForm, PlanoForm
 from django.contrib.auth.decorators import permission_required
@@ -38,7 +39,7 @@ def alterarPlano(request, id):
 
         if formPlano.is_valid():
             formPlano.save()
-            return redirect('indexPlano')
+            return redirect('indexAdm')
         else:
             planos = Plano.objects.all()
             return render(request, 'plano/planoForm.html')
@@ -49,4 +50,13 @@ def deletarPlano(request, id):
     form = Plano.objects.get(pk=id)
 
     form.delete()
-    return redirect('indexPlano')
+    return redirect('indexAdm')
+
+#Redireciona para o painel de administrador
+def redirecionarParaAdministrador(request):
+    return redirect(reverse('indexAdm'))
+
+#Mostrar planos para cliente
+def mostrarPlano(request):
+    planos = Plano.objects.all()  # ou com filtro
+    return render(request, 'plano/__pricingStart.html', {'verPlano': planos})

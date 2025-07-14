@@ -1,6 +1,6 @@
-
+{% extends 'indexPlano.html' %}
 {% block content %}
-
+<a href="/administrador/index/" class="btn btn-light btn-sm">Voltar</a>
 <div class="container-fluid pricing py-5" style="background: var(--bs-primary);">
     <div class="container py-5">
         <!-- Mostrar os serviços em forma de carroseul se a variavél verPlano for maior que 3 -->
@@ -26,6 +26,19 @@
                         <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                     </div>
                 </div>
+                <div class="p-4">
+                    {% for servicos in servico.servico.all %}
+                    <p><i class="fa fa-check text-primary me-2"></i>{{ servicos.servico }}</p>
+                    {% endfor %}
+                </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                    <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+                
+                {% for plano in verPlano %}
+                    <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
             {% endfor %}
         </div>
@@ -50,6 +63,14 @@
                     {% endfor %}
                     <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                 </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+                
+                {% for plano in verPlano %}
+                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
         </div>
 
@@ -72,6 +93,14 @@
                     {% endfor %}
                     <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                 </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+                
+                {% for plano in verPlano %}
+                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
         </div>
 
@@ -94,6 +123,14 @@
                     {% endfor %}
                     <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                 </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+                
+                {% for plano in verPlano %}
+                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
         </div>
         <!-- Mostrar os serviços sem ser em forma de carroseul se a variavél verPlano tiver 2 dados -->
@@ -117,6 +154,14 @@
                     {% endfor %}
                     <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                 </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+                
+                {% for plano in verPlano %}
+                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
         </div>
 
@@ -139,6 +184,14 @@
                     {% endfor %}
                     <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                 </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+                
+                {% for plano in verPlano %}
+                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
         </div>
         <!-- Mostrar os serviços sem ser em forma de carroseul se a variavél verPlano tiver 1 dados -->
@@ -160,8 +213,15 @@
                     {% for servico in verPlano.0.servico.all %}
                     <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
                     {% endfor %}
-                    <a href="" class="btn btn-primary btn-primary-outline-0 rounded-pill my-2 px-4">Order Now</a>
                 </div>
+                <!--Pega o id correspondente do plano da interação-->
+                {% for plano in verPlano %}
+                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+                {% endfor %}
+
+                {% for plano in verPlano %}
+                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
+                {% endfor %}
             </div>
         </div>
         {% endif %}
