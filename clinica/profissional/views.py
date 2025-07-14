@@ -1,15 +1,17 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model, logout
 from django.contrib import messages
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from profissional.models import Profissional
-from profissional.forms import EditProfissionalForm, ProfissionalForm
-from django.contrib.auth.decorators import login_required
+from profissional.forms import EditProfissionalForm, ProfissionalForm, SenhaForm
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
+
 @login_required()
+@permission_required('profissional.view_profissional', raise_exception=True)
 def index(request):
      profissionais = Profissional.objects.all()
      usuario = User.objects.all()
@@ -19,9 +21,10 @@ def index(request):
          'title' :'Listas de profissionais',
          'usuario' : usuario
      }
-     return render(request, 'profissional/indexProfissional.html', contexto)
+     return render(request, 'profissional/verPerfil.html', contexto)
 
 #criar profissional
+@permission_required('profissional.add_profissional', raise_exception=True)
 def add_profissional(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = ProfissionalForm(request.POST or None)
@@ -31,11 +34,22 @@ def add_profissional(request):
         profissional.user = user_profissional
         profissional.identificador = 'profissional'
         profissional.save()
+
+    #Adiciona o usuário ao grupo Profissional -----------------------
+
+        nomeGrupo = profissional.identificador
+        grupo, _ = Group.objects.get_or_create(name='Profissionais')
+        user_profissional.groups.add(grupo)
+        print("Profissional promovido a profissional:", profissional.nome)
+
+    #-----------------------------------------------------------------
+
         return redirect('indexProfissional')
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
 #alterar informações
 @login_required
+@permission_required('profissional.change_profissional', raise_exception=True)
 def editarDadosProfissional(request):
     user = request.user
     profissional = get_object_or_404(Profissional, user=user)
@@ -47,16 +61,49 @@ def editarDadosProfissional(request):
         if editarUserForm.is_valid() and editarProfissionalForm.is_valid():
             editarUserForm.save()
             editarProfissionalForm.save()
-            return redirect('indexProfissional')
-    else:
-        editarUserForm = EditUsuarioForm(request.POST, instance=user)
-        editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
+            return redirect('verProfissional')
+        
+        else:
+           editarUserForm = EditUsuarioForm(request.POST, instance=user)
+           editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
 
-        return render(request, 'profissional/profissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional} )
+           return render(request, 'profissional/profissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional})
+        
+#Editar senha
+@permission_required('profissional.change_profissional', raise_exception=True)
+def editSenha(request, username):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        verificarUsuario = Profissional.objects.filter(user__username=username).first()
+        if verificarUsuario and request.user.username == verificarUsuario.user.username:
+            if request.method == 'GET':
+                profissionais = User.objects.all()
+                profissional= Profissional.objects.filter(user__username=username).first()
+                formSenha = SenhaForm(instance=profissional)
+
+                return render(request, 'profissional/senhaForm.html', {'formSenha' : formSenha ,'profissionais': profissionais})
+                
+            elif request.method == 'POST':
+                profissionais = User.objects.all()
+                profissional = Profissional.objects.get(user__username=username)
+                formSenha = SenhaForm(request.POST, instance=profissional)
+
+                if formSenha.is_valid():
+                    formSenha.save()
+                        
+                    return redirect('verProfissional')
+                else:
+                    administradores = User.objects.all()
+        
+                    return render(request, 'profissional/senhaForm.html')
+        else:
+            messages.error(request, "Não é possivél alterar a senha de outro usuário")
+            return redirect('verProfissional')
 
 
 #Ver Profissionais detalhes de profissionais
 @login_required()
+@permission_required('profissional.detail_profissional', raise_exception=True)
 def verProfissional (request):
     #pega o profissional pelo o username
     user = request.user
@@ -65,9 +112,10 @@ def verProfissional (request):
 
     return render(request, 'profissional/verPerfil.html', {'user' : userProfissional, 'profissional' : profissional})
 
+# Apagar profissional
 
 @login_required()
-def deletarContaProfissional(request, username):
+def deletarContaProfissional(request):
     #pega o profissional pelo o username
     apagarProfissional= get_object_or_404(Profissional, user__username =username)
   
@@ -75,3 +123,14 @@ def deletarContaProfissional(request, username):
     apagarProfissional.delete()
     profissionalUser.delete()
     return redirect('indexProfissional')
+
+
+#Redireciona para a pagina clinicaEstetica
+def redirecionaParaIndexClinica(request):
+    return redirect(reverse('indexClinica'))
+
+#realizar logout
+@login_required
+def realizarLogout(request):
+    logout(request)
+    return redirect('login')

@@ -2,9 +2,8 @@ from queue import Full
 from django.shortcuts import redirect, render
 from servico.models import Servico, TipoServico
 from servico.forms import EditCategoriaForm, EditServicoForm, ServicoCategoriaForm, ServicoForm
-from django.db.models import Max
-from django.db.models import Subquery, OuterRef
 from django.urls import reverse
+from django.contrib.auth.decorators import permission_required
 
 def index(request):
     servicos = Servico.objects.all()
@@ -19,6 +18,7 @@ def index(request):
     return render(request, 'servico/indexServico.html', {'servicos': servicos})
 
 #Adicionar Categoria de serviço
+@permission_required('servico.add_servico', raise_exception=True)
 def addCategoria(request):
     formServico = ServicoCategoriaForm(request.POST, request.FILES)
     print(formServico.errors)
@@ -48,6 +48,7 @@ def addCategoria(request):
 #     return {'servicoPorCategoria': servicoPorCategoria}
 
 # Editar Categoria
+@permission_required('servico.change_servico', raise_exception=True)
 def alterarCategoria(request, id):
     if request.method == 'GET':
         categorias = TipoServico.objects.all()
@@ -67,12 +68,14 @@ def alterarCategoria(request, id):
             return render(request, 'servico/servicoForm.html')
         
 # Deletar Categoria
+@permission_required('servico.delete_servico', raise_exception=True)
 def deletarCategoria(request, id):
     categoria = TipoServico.objects.get(pk=id)
     categoria.delete()
 
 
 # Adicionar Serviço
+@permission_required('servio.add_servico', raise_exception=True)
 def addServico(request):
     formServico = ServicoForm(request.POST, request.FILES)
 
@@ -83,6 +86,8 @@ def addServico(request):
         return redirect('indexServico')
     return render(request, 'servico/servicoForm.html',{'formServico': formServico})      
 
+#Editar servico
+@permission_required('servico.change_servico', raise_exception=True)
 def alterarServico(request, id):
     if request.method == 'GET':
         servicos = Servico.objects.all()
@@ -104,18 +109,9 @@ def alterarServico(request, id):
             servicos = Servico.objects.all()
             return render(request, 'servico/servicoForm.html')
 
-#Mostrar Servico
-# def mostrarServico():
-#     verServicos = Servico.objects.values_list('servico', flat=True)
-#     armazenaServico = {}
-    
-#     for servico in verServicos:
-#         servicoPrestado = Servico.objects.filter(servico=servico).first()
-#         if servicoPrestado:
-#             armazenaServico[servico] = servicoPrestado
-#     return {'armazenaServico': armazenaServico}
 
 #Deletar Servico
+@permission_required('servico.delete_sevico', raise_exception=True)
 def deletarServico(request, id):
     servico = Servico.objects.get(pk=id)
 

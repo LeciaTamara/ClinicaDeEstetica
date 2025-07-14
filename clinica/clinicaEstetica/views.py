@@ -120,4 +120,4 @@ def redirecionarParaCliente(request):
 
 #Redireciona para a pagina de Profissional
 def redirecionaParaProfissional(request):
-    return redirect(reverse('indexProfissional'))
+    return redirect(reverse('verProfissional'))

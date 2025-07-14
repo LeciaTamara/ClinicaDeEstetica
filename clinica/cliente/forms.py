@@ -33,11 +33,17 @@ class EditClienteForm(forms.ModelForm):
                 'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Informe seu telefone'})
         }
 
+
 #Formulário para alterar senha do cliente
 class SenhaForm(UserChangeForm):
-    password1 = forms.CharField(label=('Senha'), widget=forms.PasswordInput)
-    password2 = forms.CharField(label=('Senha de confirmação'), widget=forms.PasswordInput)
-
+    password1 = forms.CharField(
+        label='Senha',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    password2 = forms.CharField(
+        label='Senha de confirmação',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
     class Meta:
         model = Cliente
         fields = ['password1', 'password2']
@@ -51,7 +57,8 @@ class SenhaForm(UserChangeForm):
     
     def save(self, commit=True):
         cliente = super().save(commit=False)
-        cliente.set_password(self.cleaned_data['password1'])
+        cliente.user.set_password(self.cleaned_data['password1'])
+        cliente.user.save()
         if commit:
             cliente.save()
         return cliente

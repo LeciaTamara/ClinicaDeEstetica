@@ -1,22 +1,32 @@
 
 
 from cliente.models import Cliente
+<<<<<<< HEAD
 from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm
 from servico.utils import mostrarCategoria
+=======
+from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm, SenhaForm
+>>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
+<<<<<<< HEAD
 from servico.models import TipoServico
+=======
+from django.contrib.auth import get_user_model, logout
+from django.contrib import messages
+from django.contrib.auth.models import Group
+>>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 
 # Create your views here.
 
 #Read
-@login_required()
 def indexCliente(request):
     return render(request,'cliente/verPerfil.html')
 
 #Adicionar Cliente
+# @permission_required('cliente.add_cliente', raise_exception=True)
 def add_cliente(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = ClienteForm(request.POST or None)
@@ -26,18 +36,42 @@ def add_cliente(request):
         cliente.user = user_cliente
         cliente.identificador = 'cliente'
         cliente.save()
+<<<<<<< HEAD
         return redirect('verPerfil')
+=======
+
+    #Adiciona o usuário ao grupo cliente -----------------------
+
+        nomeGrupo = cliente.identificador
+        grupo, _ = Group.objects.get_or_create(name='Clientes')
+        user_cliente.groups.add(grupo)
+        print("Cliente promovido a cliente:", cliente.nome)
+
+    #-----------------------------------------------------------------
+
+        return redirect('indexCliente')
+>>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
     return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
 
 #Read com condição
 @login_required
+<<<<<<< HEAD
 def verPerfil(request):
     cliente = get_object_or_404(Cliente, user=request.user)
     return render(request, 'cliente/verPerfil.html', {'cliente': cliente})
+=======
+@permission_required('cliente.detail_cliente', raise_exception=True)
+def verPrfil(request, username):
+    cliente = Cliente.objects.get(user__username=username)
+    userCliente = cliente.user
+
+    return render(request, 'cliente/verPerfil.html', {'user' : userCliente, 'cliente' : cliente})
+>>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 
 
 #Update
 @login_required
+@permission_required('cliente.change_cliente', raise_exception=True)
 def editarDadosCliente(request, username):
     cliente = get_object_or_404(Cliente, user__username=username)
     user = cliente.user
@@ -55,6 +89,7 @@ def editarDadosCliente(request, username):
 
 
 #Delete
+@permission_required('cliente.delete_cliente', raise_exception=True)
 def deletarContaCliente(request, username):
     apagarCliente = get_object_or_404(Cliente, user__username=username)
 
@@ -66,6 +101,7 @@ def deletarContaCliente(request, username):
 # Agendar Servico
 # EditUsuarioForm
 @login_required
+@permission_required('cliente.AgendarServico_cliente"', raise_exception=True)
 def marcarServico(request):
     formCliente = EditUsuarioForm(request.POST or None)
     formAgendaServico = AgendarServicoForm(request.POST or None)
@@ -80,6 +116,7 @@ def marcarServico(request):
         return render(request, 'cliente/agendarForm.html', {'formCliente': formCliente, 'formAgendaServico': formAgendaServico})
     
 
+<<<<<<< HEAD
 # Mostrar fotos de categoria
 def mostrarFotosCategoria(request):
     servicos = {}
@@ -121,3 +158,43 @@ def mostrarCategoria():
         if servico:
             servicoPorCategoria[categoria] = servico
     return {'servicoPorCategoria': servicoPorCategoria}
+=======
+
+#alterar senha do cliente
+@permission_required('cliente.change_cliente', raise_exception=True)
+def editSenha(request, username):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        verificarUsuario = Cliente.objects.filter(user__username=username).first()
+        if verificarUsuario and request.user.username == verificarUsuario.user.username:
+            if request.method == 'GET':
+                clientes = User.objects.all()
+                cliente= Cliente.objects.filter(user__username=username).first()
+                formSenha = SenhaForm(instance=cliente)
+
+                return render(request, 'cliente/senhaForm.html', {'formSenha' : formSenha ,'clientes': clientes})
+                
+            elif request.method == 'POST':
+                clientes = User.objects.all()
+                cliente = Cliente.objects.get(user__username=username)
+                formSenha = SenhaForm(request.POST, instance=cliente)
+
+                if formSenha.is_valid():
+                    formSenha.save()
+                        
+                    return redirect('indexCliente')
+                else:
+                    pessoas = User.objects.all()
+        
+                    return render(request, 'cliente/senhaForm.html')
+        else:
+            messages.error(request, "Não é possivél alterar a senha de outro usuário")
+            return redirect('indexCliente')
+        
+
+#realizar logout
+@login_required
+def realizarLogout(request):
+    logout(request)
+    return redirect('login')
+>>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e

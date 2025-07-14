@@ -2,7 +2,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from plano.models import Plano
 from plano.forms import EditPlanoForm, PlanoForm
+from django.contrib.auth.decorators import permission_required
 
+#Criar plano
+@permission_required('plano.add_plano', raise_exception=True)
 def addPlano(request):
     formPlano = PlanoForm(request.POST)
 
@@ -13,9 +16,14 @@ def addPlano(request):
         return redirect('indexPlano')
     return render(request, 'plano/planoForm.html',{'formPlano': formPlano})
 
+
+#Ver planos
 def index(request):
     return render(request, 'plano/indexPlano.html')
 
+
+#Editar planos
+@permission_required('plano.change_plano', raise_exception=True)
 def alterarPlano(request, id):
     if request.method == 'GET':
         planos = Plano.objects.all()
@@ -36,6 +44,8 @@ def alterarPlano(request, id):
             planos = Plano.objects.all()
             return render(request, 'plano/planoForm.html')
 
+#Deletar palanos
+@permission_required('plano.delete_plano', raise_exception=True)
 def deletarPlano(request, id):
     form = Plano.objects.get(pk=id)
 

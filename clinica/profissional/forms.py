@@ -1,7 +1,7 @@
 from django.forms import ModelForm, fields
 from django import forms
 from django.db import models
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from .models import Profissional
 
@@ -56,3 +56,33 @@ class EditProfissionalForm(forms.ModelForm):
             'numTelefone': forms.NumberInput(attrs={
                 'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Número de telefone'}),
         }
+
+
+#Formulário para alterar senha do profissional
+class SenhaForm(UserChangeForm):
+    password1 = forms.CharField(
+        label='Senha',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    password2 = forms.CharField(
+        label='Senha de confirmação',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    class Meta:
+        model = Profissional
+        fields = ['password1', 'password2']
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(self.error_messages['password_mismatch'], code='password_mismatch',)
+        return password2
+    
+    def save(self, commit=True):
+        profissional = super().save(commit=False)
+        profissional.user.set_password(self.cleaned_data['password1'])
+        profissional.user.save()
+        if commit:
+            profissional.save()
+        return profissional

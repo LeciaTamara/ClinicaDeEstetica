@@ -1,36 +1,40 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
-from administrador.forms import AdministradorForm
+from administrador.forms import AdministradorForm, EditAdmForm, SenhaForm
 from administrador.models import Administrador
 from plano.models import Plano
 from profissional.models import Profissional
 from cliente.models import Cliente
 from servico.models import Servico, TipoServico
-from servico.forms import EditCategoriaForm, EditServicoForm, ServicoCategoriaForm, ServicoForm
+from servico.forms import EditCategoriaForm, EditServicoForm
 from servico.forms import EditServicoForm
-from clinicaEstetica.forms import AdicionarUsuarioForm
+from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
 from django.urls import reverse
-
+from django.contrib.auth import get_user_model, logout
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
-#Index de administrador
-@login_required()
+# #Index de administrador
+# @login_required()
+# @permission_required('administrador.view_administrador', raise_exception=True)
 def index (request):
     return render(request, 'administrador/indexAdministrador.html',)
 
 #Ver todos os administradores
 @login_required()
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def verAdministrador (request):
     administradores = Administrador.objects.select_related('user').all()
     return render(request, 'administrador/verAdministrador.html', {'administradores' : administradores})
 
 #Ver todos os profissionais
 @login_required()
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def verProfissional (request):
     profissionais = Profissional.objects.select_related('user').all()
     return render(request, 'administrador/verProfissional.html', {'profissionais' : profissionais})
@@ -43,23 +47,37 @@ def verPlano(request):
 
 #Ver todos os clientes
 @login_required()
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def verCliente (request):
     clientes = Cliente.objects.select_related('user').all()
     return render(request, 'administrador/verClientes.html', {'clientes' : clientes})
 
+<<<<<<< HEAD
 # @login_required
 # def verPlano(request):
     
 # Adicionar administrador
+=======
+#Adicionar administrador
+@permission_required('administrador.add_administrador', raise_exception=True)
+>>>>>>> 063b0a25733742030d958f917ce817d37c3aa46e
 def add_administrador(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = AdministradorForm(request.POST or None)
     if form_user.is_valid() and form.is_valid():
-        user_administrador = form_user.save()
-        administrador = form.save(commit=False)
-        administrador.user = user_administrador
+        user_administrador = form_user.save() #Cria o usuário do model user
+        administrador = form.save(commit=False) #Criar o usuario do model Administrador
+        administrador.user = user_administrador #Associar o usuario User com o Administrador
         administrador.identificador = 'administrador'
         administrador.save()
+
+    #Adiciona o usuário ao grupo administrador -----------------------
+        nomeGrupo = administrador.identificador.capitalize() + 'es'
+        grupo = Group.objects.get(name=nomeGrupo)
+        user_administrador.groups.add(grupo)
+        print("Administrador promovido a admi:", administrador.nome)
+
+    #-----------------------------------------------------------------
         print("Administrador criado:", administrador.id)
 
         tornarAdmin(request, user_administrador.username)
@@ -82,19 +100,83 @@ def tornarAdmin(request, userName):
     
     return redirect('indexAdm')
 
+#Update Adm
+@login_required
+@permission_required('administrador.change_administrador', raise_exception=True)
+def editarDadosAdmin(request, username):
+    administrador = get_object_or_404(Administrador, user__username=username)
+    user = administrador.user
+    
+    editarUserForm = EditUsuarioForm(request.POST, instance=user)
+    editarAdministradorForm = EditAdmForm(request.POST, instance=administrador)
+
+    if request.method == 'POST':
+        if editarUserForm.is_valid() and editarAdministradorForm.is_valid():
+            editarUserForm.save()
+            editarAdministradorForm.save()
+            return redirect('indexAdm')
+
+    return render(request, 'administrador/cadastrarAdminForm.html', {'editarUserForm' : editarUserForm, 'editarAdministradorForm' : editarAdministradorForm, 'Administrador' : administrador} )
+
+
+#Delete Adm
+@permission_required('administrador.delete_administrador', raise_exception=True)
+def deletarContaAdmin(request, username):
+    apagarAdministrador = get_object_or_404(Administrador, user__username=username)
+
+    administradorUser = apagarAdministrador.user
+    apagarAdministrador.delete()
+    administradorUser.delete()
+    return redirect('indexClinica')
+
+#Editar senha
+@permission_required('administrador.change_administrador', raise_exception=True)
+def editSenha(request, username):
+    User = get_user_model()
+    if request.user.is_authenticated:
+        verificarUsuario = Administrador.objects.filter(user__username=username).first()
+        if verificarUsuario and request.user.username == verificarUsuario.user.username:
+            if request.method == 'GET':
+                administradores = User.objects.all()
+                administrador= Cliente.objects.filter(user__username=username).first()
+                formSenha = SenhaForm(instance=administrador)
+
+                return render(request, 'administrador/senhaForm.html', {'formSenha' : formSenha ,'administradores': administradores})
+                
+            elif request.method == 'POST':
+                administradores = User.objects.all()
+                administrador = Administrador.objects.get(user__username=username)
+                formSenha = SenhaForm(request.POST, instance=administrador)
+
+                if formSenha.is_valid():
+                    formSenha.save()
+                        
+                    return redirect('indexAdm')
+                else:
+                    administradores = User.objects.all()
+        
+                    return render(request, 'administrador/senhaForm.html')
+        else:
+            messages.error(request, "Não é possivél alterar a senha de outro usuário")
+            return redirect('indexAdm')
+
 #Todos os serviços
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def mostrarServicos(request):
     servicos = {}
     servicos.update(mostrarServico())
     return render(request, 'administrador/todosServicos.html', servicos)
 
 #Deletar serviço
+@permission_required('administrador.delete_administrador', raise_exception=True)
 def deletarServico(request, id):
     servico = Servico.objects.get(pk=id)
 
     servico.delete()
     return redirect('verServico')
 
+#Alterar serviço
+@permission_required('administrador.change_administrador', raise_exception=True)
 def alterarServico(request, id):
     if request.method == 'GET':
         servicos = Servico.objects.all()
@@ -127,6 +209,7 @@ def redirecionaPlano(request):
 
 
 #alterar categoria
+@permission_required('administrador.change_administrador', raise_exception=True)
 def alterarCategoria(request, id):
     if request.method == 'GET':
         categorias = TipoServico.objects.all()
@@ -147,9 +230,18 @@ def alterarCategoria(request, id):
         
 
 # Deletar Categoria
+@permission_required('administrador.delete_administrador', raise_exception=True)
 def deletarCategoria(request, id):
     categoria = TipoServico.objects.get(pk=id)
     categoria.delete()
 
     return ("indexAdm")
+
+
+#realizar logout
+@login_required
+def realizarLogout(request):
+    logout(request)
+    return redirect('login')
+
 

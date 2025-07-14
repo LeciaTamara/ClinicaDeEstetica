@@ -1,0 +1,12 @@
+{% extends 'indexFormCliente.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center m-3">
+</div>
+
+<form method="POST" action="" class="p-4 bg-info rounded shadow-sm mb-5 pe-5" id="formulario">
+    {% csrf_token %}
+    {{ formSenha }}
+    <button type="submit" class="btn btn-primary m-3 p-3">Salvar</button>
+</form>
+{% endblock %}

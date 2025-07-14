@@ -11,5 +11,10 @@ class Profissional(models.Model):
     salario = models.IntegerField()
     identificador = models.CharField(max_length=20, default='profissional')
 
+    class Meta:
+        permissions = (
+            ("detail_profissional","Pode ver detalhe do profissional "),
+        )
+
     def __str__(self):
         return f'Nome: {self.nome} -- Especialização: {self.especializacao}'
