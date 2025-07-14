@@ -10,5 +10,6 @@ urlpatterns = [
     path("alterarCategoria/<int:id>/", views.alterarCategoria, name="alterarCategoria"),
     path("deletarCategoria/<int:id>/", views.deletarCategoria, name="deletarCategoria"),
     #path("mostrarCategoria/", views.mostrarCategoria, name="mostrarCategoria"),
+    path("redirecionaParaAdministrador/", views.redirecionarParaAdministrador, name='redirecionaParaAdministrador'),
 
 ]

@@ -1,9 +1,18 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from administrador.forms import AdministradorForm
+from administrador.models import Administrador
+from profissional.models import Profissional
+from cliente.models import Cliente
+from servico.models import Servico, TipoServico
+from servico.forms import EditCategoriaForm, EditServicoForm, ServicoCategoriaForm, ServicoForm
+from servico.forms import EditServicoForm
 from clinicaEstetica.forms import AdicionarUsuarioForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
+from django.urls import reverse
 
 
 # Create your views here.
@@ -11,8 +20,25 @@ from django.contrib.auth.decorators import login_required
 #Index de administrador
 @login_required()
 def index (request):
-    return render(request, 'administrador/indexAdministrador.html')
+    return render(request, 'administrador/indexAdministrador.html',)
 
+#Ver todos os administradores
+@login_required()
+def verAdministrador (request):
+    administradores = Administrador.objects.select_related('user').all()
+    return render(request, 'administrador/verAdministrador.html', {'administradores' : administradores})
+
+#Ver todos os profissionais
+@login_required()
+def verProfissional (request):
+    profissionais = Profissional.objects.select_related('user').all()
+    return render(request, 'administrador/verProfissional.html', {'profissionais' : profissionais})
+
+#Ver todos os clientes
+@login_required()
+def verCliente (request):
+    clientes = Cliente.objects.select_related('user').all()
+    return render(request, 'administrador/verClientes.html', {'clientes' : clientes})
 
 # Adicionar administrador
 def add_administrador(request):
@@ -45,3 +71,69 @@ def tornarAdmin(request, userName):
         messages.success(request, "Usuário promovido a administrador") 
     
     return redirect('indexAdm')
+
+#Todos os serviços
+def mostrarServicos(request):
+    servicos = {}
+    servicos.update(mostrarServico())
+    return render(request, 'administrador/todosServicos.html', servicos)
+
+#Deletar serviço
+def deletarServico(request, id):
+    servico = Servico.objects.get(pk=id)
+
+    servico.delete()
+    return redirect('verServico')
+
+def alterarServico(request, id):
+    if request.method == 'GET':
+        servicos = Servico.objects.all()
+        servico = Servico.objects.filter(pk=id).first()
+        formServico = EditServicoForm(instance=servico)
+
+        return render(request, 'servico/servicoForm.html',{'formServico': formServico, 'servicos': servicos})
+    
+    elif request.method == 'POST':
+        servicos = Servico.objects.all()
+        servico = Servico.objects.get(pk=id)
+        formServico = EditServicoForm(request.POST, request.FILES, instance=servico)
+
+
+        if formServico.is_valid():
+            formServico.save()
+            return redirect('indexServico')
+        else:
+            servicos = Servico.objects.all()
+            return render(request, 'administrador/servicoForm.html')
+
+#Redireciona para o painel de serviços
+def redirecionarParaServico(request):
+    return redirect(reverse('indexServico'))
+
+#alterar categoria
+def alterarCategoria(request, id):
+    if request.method == 'GET':
+        categorias = TipoServico.objects.all()
+        categoria = TipoServico.objects.filter(pk=id).first()
+        formServico = EditCategoriaForm(instance=categoria)
+        return render(request, 'servico/servicoForm.html', {'formServico': formServico, 'categorias': categorias})
+    elif request.method == 'POST':
+        categorias = TipoServico.objects.all()
+        categoria = TipoServico.objects.get(pk=id)
+        formServico = EditCategoriaForm(request.POST, request.FILES, instance=categoria)
+
+        if formServico.is_valid():
+            formServico.save()
+            return redirect('indexServico')
+        else:
+            categorias = TipoServico.objects.all()
+            return render(request, 'servico/servicoForm.html')
+        
+
+# Deletar Categoria
+def deletarCategoria(request, id):
+    categoria = TipoServico.objects.get(pk=id)
+    categoria.delete()
+
+    return ("indexAdm")
+

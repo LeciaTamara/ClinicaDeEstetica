@@ -13,7 +13,7 @@ class ServicoCategoriaForm(forms.ModelForm):
 
         widgets = {
             'categoria': forms.TextInput(attrs={
-                'class': 'form-control py-3 border-white bg transparent text-black w-50', 'placeholder': 'Categoria'}),
+                'class': 'form-control py-3 border-white bg transparent text-black w-100 mb-3 mt-4', 'placeholder': 'Categoria'}),
 
             'imagem': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
@@ -68,20 +68,27 @@ class EditServicoForm(forms.ModelForm):
         fields = ['tipo', 'servico', 'preco', 'profissional', 'descricao', 'arquivo']
 
         widgets = {
-            'tipo':forms.TextInput(attrs={
-                'class': 'form-control py-3 border-white bg transparent text-black w-50', 'placeholder': 'Categoria'}),
-            
-            'servico':forms.TextInput(attrs={
-                'class': 'form-control py-3 border-white bg transparent text-black w-50', 'placeholder': 'Tipo'}),
-            
+            'servico': forms.TextInput(attrs={
+                'class': 'form-control w-100 mb-3', 'rows': 6,
+                'placeholder': 'Tipo'
+            }),
             'preco': forms.NumberInput(attrs={
-                'class': 'form-control py border-white bg transparent text-black w-50', 'placeholder': 'Preco'}),
-
-            'descricao' : forms.Textarea(attrs={
-                'class': 'form-control py-3 border-white bg-transparent text-white w-50','rows' : 6, 'cols' : 50, 'placeholder': 'Especialização'}),
-
-            'arquivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+                'class': 'form-control w-100 mb-3',
+                'placeholder': 'Preço'
+            }),
+            'profissional': forms.Select(attrs={
+                'class': 'form-control w-100 mb-3'
+            }),
+            'descricao': forms.Textarea(attrs={
+                'class': 'form-control w-100 mb-3',
+                'rows': 6,
+                'placeholder': 'Especialização'
+            }),
+            'arquivo': forms.ClearableFileInput(attrs={
+                'class': 'form-control w-100 mb-3'
+            }),
         }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['arquivo'].help_text = 'Adicione uma image'
+        self.fields['arquivo'].help_text = 'Adicione uma imagem'

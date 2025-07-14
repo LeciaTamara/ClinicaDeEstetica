@@ -1,0 +1,32 @@
+{% extends 'indexADM.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-3 text-primary text-center">👥 Administradores Cadastrados</h3>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>Nome de usuário</th>
+        <th>Email</th>
+        <th>Nome completo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for administrador in administradores %}
+      <tr>
+        <td>{{ administrador.user.username }}</td>
+        <td>{{ administrador.user.email }}</td>
+        <td>{{ administrador.nome }}</td>
+        <td class="d-flex justify-content-between">
+            <a href="#"><i class="bi bi-trash3-fill text-danger"></i></a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3">Nenhum administrador cadastrado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

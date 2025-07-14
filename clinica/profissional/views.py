@@ -34,43 +34,6 @@ def add_profissional(request):
         return redirect('indexProfissional')
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
-
-# def criarProfissional(request):
-#     formProfissional = ProfissionalForm(request.POST)
-
-#     if formProfissional.is_valid():
-#         profissional = formProfissional.save(commit=False)
-#         profissional.save()
-
-#         #redireciona para a página inicial do Admin
-#         return redirect(reverse('indexAdm'))
-
-#     return render(request, 'profissional/profissionalForm.html', {'formProfissional': formProfissional})
-
-
-# Mostrar detalhes
-# def mostrardetalhes(request, username):
-#     # Captura o username do usuário e exibe as suas informações no formulário
-#     #pega todos os dados do modelo da classe User
-
-#     User = get_user_model()
-
-#     #if request.user.is_authenticated:
-#     verificaUsername = User.objects.filter(username=username).first()
-
-#         #if verificaUsername and request.user.username == verificaUsername.username:
-#     profissionais = User.objects.all()
-#     profissional = User.objects.filter(username=username).first()
-
-#     profissional = Profissional.objects.all()
-
-#     return render(request, 'profissional/detalhes.html', {'profissional' : profissional})
-
-#     # else:
-#     #     messages.error(request, "Você não está longado")
-#     #     return redirect('indexProfissional')
-
-
 #alterar informações
 
 def alterarInformacao(request, id):
