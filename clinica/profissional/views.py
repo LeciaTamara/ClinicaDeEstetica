@@ -65,22 +65,13 @@ def verProfissional (request):
 
     return render(request, 'profissional/verPerfil.html', {'user' : userProfissional, 'profissional' : profissional})
 
-# Apagar profissional
-def deletarContaCliente(request, username):
-    apagarCliente = get_object_or_404(Cliente, user__username=username)
-
-    clienteUser = apagarCliente.user
-    apagarCliente.delete()
-    clienteUser.delete()
-    return redirect('indexClinica')
 
 @login_required()
-def deletarContaProfissional(request):
+def deletarContaProfissional(request, username):
     #pega o profissional pelo o username
-    user = request.user
-    profissional= get_object_or_404(Profissional, user = user)
+    apagarProfissional= get_object_or_404(Profissional, user__username =username)
   
-    profissionalUser = profissional.user
-    profissional.delete()
+    profissionalUser = apagarProfissional.user
+    apagarProfissional.delete()
     profissionalUser.delete()
     return redirect('indexProfissional')

@@ -12,7 +12,9 @@ urlpatterns = [
     path("deletarServico/<int:id>/", views.deletarServico, name="deletarServico"),
     path("alterarServico/<int:id>/", views.alterarServico, name="alterarServico"),
     path("redirecionaServico/", views.redirecionarParaServico, name="redirecionaServico"),
+    path("redirecionaPlano/", views.redirecionaPlano, name="redirecionaPlano"),
     path("alterarCategoria/<int:id>/", views.alterarCategoria, name="alterarCategoria"),
     path("deletarCategoria/<int:id>/", views.deletarCategoria, name="deletarCategoria"),
+    path("verPlano/", views.verPlano, name="verPlano")
     
 ]

@@ -1,18 +1,20 @@
-from django.shortcuts import redirect, render
+
 
 from cliente.models import Cliente
 from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm
+from servico.utils import mostrarCategoria
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
+from servico.models import TipoServico
 
 # Create your views here.
 
 #Read
 @login_required()
 def indexCliente(request):
-    return render(request,'cliente/indexCliente.html')
+    return render(request,'cliente/verPerfil.html')
 
 #Adicionar Cliente
 def add_cliente(request):
@@ -24,16 +26,14 @@ def add_cliente(request):
         cliente.user = user_cliente
         cliente.identificador = 'cliente'
         cliente.save()
-        return redirect('indexCliente')
+        return redirect('verPerfil')
     return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
 
 #Read com condição
 @login_required
-def verPrfil(request, username):
-    cliente = Cliente.objects.get(user__username=username)
-    userCliente = cliente.user
-
-    return render(request, 'cliente/verPerfil.html', {'user' : userCliente, 'cliente' : cliente})
+def verPerfil(request):
+    cliente = get_object_or_404(Cliente, user=request.user)
+    return render(request, 'cliente/verPerfil.html', {'cliente': cliente})
 
 
 #Update
@@ -49,7 +49,7 @@ def editarDadosCliente(request, username):
         if editarUserForm.is_valid() and editarClienteForm.is_valid():
             editarUserForm.save()
             editarClienteForm.save()
-            return redirect('indexCliente')
+            return redirect('verPerfil')
 
     return render(request, 'cliente/addClienteForm.html', {'editarUserForm' : editarUserForm, 'editarClienteForm' : editarClienteForm, 'cliente' : cliente} )
 
@@ -78,3 +78,46 @@ def marcarServico(request):
         return redirect('indexClinica')
     else:
         return render(request, 'cliente/agendarForm.html', {'formCliente': formCliente, 'formAgendaServico': formAgendaServico})
+    
+
+# Mostrar fotos de categoria
+def mostrarFotosCategoria(request):
+    servicos = {}
+    servicos.update(mostrarCategoria())
+    return render(request,'clinicaEstetica/indexClinica.html', servicos)
+
+
+from collections import defaultdict
+
+# def mostrarCategoria():
+#     categorias = TipoServico.objects.values_list('categoria', flat=True).distinct()
+#     servicoPorCategoria = defaultdict(list)
+
+#     for categoria in categorias:
+#         servicos = TipoServico.objects.filter(categoria=categoria)
+#         servicoPorCategoria[categoria].extend(servicos)
+
+#     return {'servicoPorCategoria': dict(servicoPorCategoria)}
+
+
+# def mostrarTodasImagens(request):
+#     imagens = TipoServico.objects.all()
+#     return render(request, 'cliente/indexCliente.html', {
+#         'imagens': imagens
+#     })
+
+
+def mostrarCategoria():
+    # Essa linha retorna para a variavél categorias os valores do atrbuto
+    # categoria, onde flat=True tranforma os valores retornados pela a lista
+    # em uma lista simples, e o distinc não permite que valores iguais entre
+    # na lista.
+    categorias = TipoServico.objects.values_list('categoria', flat=True).distinct()
+    # Essa linha cria um dicionário vázio
+    servicoPorCategoria = {}
+
+    for categoria in categorias:
+        servico = TipoServico.objects.filter(categoria=categoria).first()
+        if servico:
+            servicoPorCategoria[categoria] = servico
+    return {'servicoPorCategoria': servicoPorCategoria}

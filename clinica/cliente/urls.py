@@ -7,7 +7,8 @@ urlpatterns = [
     path('index/', views.indexCliente, name='indexCliente'),
     path('adicionarCliente/', views.add_cliente, name='adicionarCliente'),
     path('editar/<str:username>/', views.editarDadosCliente, name='editar'),
-    path('verPerfil/<str:username>/', views.verPrfil, name='verPerfil'),
+    path('verPerfil/', views.verPerfil, name='verPerfil'),
     path('excluirConta/<str:username>/', views.deletarContaCliente, name='excluirConta'),
     path('marcarServico/', views.marcarServico, name='marcarServico'),
+    path('mostrarCategoria/', views.mostrarCategoria, name='mostrarCategoria'),
 ]

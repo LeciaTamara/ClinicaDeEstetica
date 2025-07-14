@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from administrador.forms import AdministradorForm
 from administrador.models import Administrador
+from plano.models import Plano
 from profissional.models import Profissional
 from cliente.models import Cliente
 from servico.models import Servico, TipoServico
@@ -34,12 +35,21 @@ def verProfissional (request):
     profissionais = Profissional.objects.select_related('user').all()
     return render(request, 'administrador/verProfissional.html', {'profissionais' : profissionais})
 
+# ver e editar plano
+@login_required
+def verPlano(request):
+    planos = Plano.objects.all()  # ou com filtro
+    return render(request, 'administrador/verPlanos.html', {'verPlano': planos})
+
 #Ver todos os clientes
 @login_required()
 def verCliente (request):
     clientes = Cliente.objects.select_related('user').all()
     return render(request, 'administrador/verClientes.html', {'clientes' : clientes})
 
+# @login_required
+# def verPlano(request):
+    
 # Adicionar administrador
 def add_administrador(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
@@ -109,6 +119,12 @@ def alterarServico(request, id):
 #Redireciona para o painel de serviços
 def redirecionarParaServico(request):
     return redirect(reverse('indexServico'))
+
+
+#Redireciona para o painel de planos
+def redirecionaPlano(request):
+    return redirect(reverse('indexPlano'))
+
 
 #alterar categoria
 def alterarCategoria(request, id):
