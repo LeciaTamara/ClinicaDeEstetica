@@ -6,10 +6,11 @@ from django.contrib import messages
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from profissional.models import Profissional
 from profissional.forms import EditProfissionalForm, ProfissionalForm, SenhaForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 @login_required()
+@permission_required('profissional.view_profissional', raise_exception=True)
 def index(request):
      profissionais = Profissional.objects.all()
      usuario = User.objects.all()
@@ -19,9 +20,10 @@ def index(request):
          'title' :'Listas de profissionais',
          'usuario' : usuario
      }
-     return render(request, 'profissional/indexProfissional.html', contexto)
+     return render(request, 'profissional/verPerfil.html', contexto)
 
 #criar profissional
+@permission_required('profissional.add_profissional', raise_exception=True)
 def add_profissional(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = ProfissionalForm(request.POST or None)
@@ -36,6 +38,7 @@ def add_profissional(request):
 
 #alterar informações
 @login_required
+@permission_required('profissional.change_profissional', raise_exception=True)
 def editarDadosProfissional(request):
     user = request.user
     profissional = get_object_or_404(Profissional, user=user)
@@ -47,13 +50,16 @@ def editarDadosProfissional(request):
         if editarUserForm.is_valid() and editarProfissionalForm.is_valid():
             editarUserForm.save()
             editarProfissionalForm.save()
-            return redirect('indexProfissional')
+            return redirect('verProfissional')
         
         else:
-            profissionais = Profissional.objects.all()
-            return render(request, 'profissional/profissionalForm.html')
+           editarUserForm = EditUsuarioForm(request.POST, instance=user)
+           editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
+
+           return render(request, 'profissional/profissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional})
         
 #Editar senha
+@permission_required('profissional.change_profissional', raise_exception=True)
 def editSenha(request, username):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -74,23 +80,19 @@ def editSenha(request, username):
                 if formSenha.is_valid():
                     formSenha.save()
                         
-                    return redirect('indexProfissional')
+                    return redirect('verProfissional')
                 else:
-                    pessoas = User.objects.all()
+                    administradores = User.objects.all()
         
                     return render(request, 'profissional/senhaForm.html')
         else:
             messages.error(request, "Não é possivél alterar a senha de outro usuário")
-            return redirect('indexProfissional')
-    else:
-        editarUserForm = EditUsuarioForm(request.POST, instance=user)
-        editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
-
-        return render(request, 'profissional/profissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional} )
+            return redirect('verProfissional')
 
 
 #Ver Profissionais detalhes de profissionais
 @login_required()
+@permission_required('profissional.detail_profissional', raise_exception=True)
 def verProfissional (request):
     #pega o profissional pelo o username
     user = request.user
@@ -102,6 +104,7 @@ def verProfissional (request):
 # Apagar profissional
 
 @login_required()
+@permission_required('profissional.delete_profissional', raise_exception=True)
 def deletarContaProfissional(request):
     #pega o profissional pelo o username
     user = request.user
@@ -111,3 +114,8 @@ def deletarContaProfissional(request):
     profissional.delete()
     profissionalUser.delete()
     return redirect('indexProfissional')
+
+
+#Redireciona para a pagina clinicaEstetica
+def redirecionaParaIndexClinica(request):
+    return redirect(reverse('indexClinica'))

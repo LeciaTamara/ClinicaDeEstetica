@@ -10,7 +10,7 @@ from servico.forms import EditCategoriaForm, EditServicoForm
 from servico.forms import EditServicoForm
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -20,28 +20,33 @@ from django.contrib.auth import get_user_model
 
 #Index de administrador
 @login_required()
+@permission_required('administrador.view_administrador', raise_exception=True)
 def index (request):
     return render(request, 'administrador/indexAdministrador.html',)
 
 #Ver todos os administradores
 @login_required()
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def verAdministrador (request):
     administradores = Administrador.objects.select_related('user').all()
     return render(request, 'administrador/verAdministrador.html', {'administradores' : administradores})
 
 #Ver todos os profissionais
 @login_required()
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def verProfissional (request):
     profissionais = Profissional.objects.select_related('user').all()
     return render(request, 'administrador/verProfissional.html', {'profissionais' : profissionais})
 
 #Ver todos os clientes
 @login_required()
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def verCliente (request):
     clientes = Cliente.objects.select_related('user').all()
     return render(request, 'administrador/verClientes.html', {'clientes' : clientes})
 
 # Adicionar administrador
+@permission_required('administrador.add_administrador', raise_exception=True)
 def add_administrador(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = AdministradorForm(request.POST or None)
@@ -75,6 +80,7 @@ def tornarAdmin(request, userName):
 
 #Update Adm
 @login_required
+@permission_required('administrador.change_administrador', raise_exception=True)
 def editarDadosAdmin(request, username):
     administrador = get_object_or_404(Administrador, user__username=username)
     user = administrador.user
@@ -92,6 +98,7 @@ def editarDadosAdmin(request, username):
 
 
 #Delete Adm
+@permission_required('administrador.delete_administrador', raise_exception=True)
 def deletarContaAdmin(request, username):
     apagarAdministrador = get_object_or_404(Administrador, user__username=username)
 
@@ -101,6 +108,7 @@ def deletarContaAdmin(request, username):
     return redirect('indexClinica')
 
 #Editar senha
+@permission_required('administrador.change_administrador', raise_exception=True)
 def editSenha(request, username):
     User = get_user_model()
     if request.user.is_authenticated:
@@ -123,9 +131,9 @@ def editSenha(request, username):
                         
                     return redirect('indexAdm')
                 else:
-                    pessoas = User.objects.all()
+                    administradores = User.objects.all()
         
-                    return render(request, 'cliente/senhaForm.html')
+                    return render(request, 'administrador/senhaForm.html')
         else:
             messages.error(request, "Não é possivél alterar a senha de outro usuário")
             return redirect('indexAdm')
@@ -137,12 +145,15 @@ def mostrarServicos(request):
     return render(request, 'administrador/todosServicos.html', servicos)
 
 #Deletar serviço
+@permission_required('administrador.delete_administrador', raise_exception=True)
 def deletarServico(request, id):
     servico = Servico.objects.get(pk=id)
 
     servico.delete()
     return redirect('verServico')
 
+#Alterar serviço
+@permission_required('administrador.change_administrador', raise_exception=True)
 def alterarServico(request, id):
     if request.method == 'GET':
         servicos = Servico.objects.all()
@@ -169,6 +180,7 @@ def redirecionarParaServico(request):
     return redirect(reverse('indexServico'))
 
 #alterar categoria
+@permission_required('administrador.change_administrador', raise_exception=True)
 def alterarCategoria(request, id):
     if request.method == 'GET':
         categorias = TipoServico.objects.all()
@@ -189,6 +201,7 @@ def alterarCategoria(request, id):
         
 
 # Deletar Categoria
+@permission_required('administrador.delete_administrador', raise_exception=True)
 def deletarCategoria(request, id):
     categoria = TipoServico.objects.get(pk=id)
     categoria.delete()

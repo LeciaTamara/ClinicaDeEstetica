@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from cliente.models import Cliente
 from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm, SenhaForm
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import get_user_model
@@ -13,10 +13,12 @@ from django.contrib import messages
 
 #Read
 @login_required()
+@permission_required('cliente.view_cliente', raise_exception=True)
 def indexCliente(request):
     return render(request,'cliente/indexCliente.html')
 
 #Adicionar Cliente
+@permission_required('cliente.add_cliente', raise_exception=True)
 def add_cliente(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = ClienteForm(request.POST or None)
@@ -31,6 +33,7 @@ def add_cliente(request):
 
 #Read com condição
 @login_required
+@permission_required('cliente.detail_cliente', raise_exception=True)
 def verPrfil(request, username):
     cliente = Cliente.objects.get(user__username=username)
     userCliente = cliente.user
@@ -40,6 +43,7 @@ def verPrfil(request, username):
 
 #Update
 @login_required
+@permission_required('cliente.change_cliente', raise_exception=True)
 def editarDadosCliente(request, username):
     cliente = get_object_or_404(Cliente, user__username=username)
     user = cliente.user
@@ -57,6 +61,7 @@ def editarDadosCliente(request, username):
 
 
 #Delete
+@permission_required('cliente.delete_cliente', raise_exception=True)
 def deletarContaCliente(request, username):
     apagarCliente = get_object_or_404(Cliente, user__username=username)
 
@@ -68,6 +73,7 @@ def deletarContaCliente(request, username):
 # Agendar Servico
 # EditUsuarioForm
 @login_required
+@permission_required('cliente.AgendarServico_cliente"', raise_exception=True)
 def marcarServico(request):
     formCliente = EditUsuarioForm(request.POST or None)
     formAgendaServico = AgendarServicoForm(request.POST or None)
@@ -84,6 +90,7 @@ def marcarServico(request):
 
 
 #alterar senha do cliente
+@permission_required('cliente.change_cliente', raise_exception=True)
 def editSenha(request, username):
     User = get_user_model()
     if request.user.is_authenticated:

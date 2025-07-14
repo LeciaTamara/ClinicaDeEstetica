@@ -9,6 +9,12 @@ class Cliente(models.Model):
     telefone = models.IntegerField()
     identificador = models.CharField(max_length=20, default='cliente')
 
+    class Meta:
+        permissions = (
+            ("detail_cliente","Pode ver detalhe do perfil"),
+            ("AgendarServico_cliente", "Pode agendar um servico"),
+        )
+
 class AgendarServico(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nomeCliente = models.CharField(max_length=100)
