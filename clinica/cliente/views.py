@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 
 from cliente.models import Cliente
-from cliente.forms import ClienteForm, EditClienteForm
+from cliente.forms import AgendarServicoForm, ClienteForm, EditClienteForm
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -62,3 +62,19 @@ def deletarContaCliente(request, username):
     apagarCliente.delete()
     clienteUser.delete()
     return redirect('indexClinica')
+
+# Agendar Servico
+# EditUsuarioForm
+@login_required
+def marcarServico(request):
+    formCliente = EditUsuarioForm(request.POST or None)
+    formAgendaServico = AgendarServicoForm(request.POST or None)
+    if formCliente.is_valid() and formAgendaServico.is_valid():
+        clienteForm = formCliente.save()
+        agendaServicoForm = formAgendaServico.save(commit=False)
+        agendaServicoForm.user = clienteForm
+        agendaServicoForm.save()
+        formAgendaServico.save_m2m()
+        return redirect('indexClinica')
+    else:
+        return render(request, 'cliente/agendarForm.html', {'formCliente': formCliente, 'formAgendaServico': formAgendaServico})

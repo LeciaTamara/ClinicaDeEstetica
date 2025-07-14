@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -67,6 +69,7 @@ TEMPLATES = [
         #          BASE_DIR / 'cliente/templates',
         #          BASE_DIR / 'servico/templates',
                    BASE_DIR / 'templates',
+                   BASE_DIR / 'cliente' / 'templates',
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -122,6 +125,13 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# Configuração de Sessões: armazena os login
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'  # Usa a memória cache para gerenciar as sessões
+#SESSION_COOKIE_AGE = 3600  # Tempo de expiração da sessão (1 hora)
+#SESSION_SAVE_EVERY_REQUEST = False  # Não salva a sessão em cada requisição
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expira a sessão ao fechar o navegador
+SESSION_COOKIE_SECURE = True  # Garante que a sessão seja transmitida apenas via HTTPS
 
 
 # Static files (CSS, JavaScript, Images)

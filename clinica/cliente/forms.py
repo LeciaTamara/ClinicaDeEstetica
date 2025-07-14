@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from servico.models import Servico
 
-from.models import Cliente
+from.models import Cliente,AgendarServico
 from django import forms
 
 #Formulário de cadastro de clientes
@@ -54,3 +55,47 @@ class SenhaForm(UserChangeForm):
         if commit:
             cliente.save()
         return cliente
+
+#Agendar Servico
+class AgendarServicoForm(forms.ModelForm):
+        #criar o campo com mutiplas seleções
+    servico = forms.ModelMultipleChoiceField(
+        queryset=Servico.objects.all(),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'select-multiple'})
+    )
+    class Meta:
+        model = AgendarServico
+        fields = ['nomeCliente', 'servico', 'data', 'horario']
+        widgets = {
+            'nomeCliente' : forms.TextInput(attrs={
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50','placeholder': 'Informe seu nome completo'}),
+            'data': forms.TextInput(attrs={
+                'type': 'date',
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50'
+            }),
+            'horario': forms.TextInput(attrs={
+                'type': 'time',
+                'class': 'form-control py-3 border-white bg-transparent text-white w-50'
+            }),
+        }
+    # Cria uma função clean para verificar se já tem um serviço agendado para o mesmo horário
+    # Se caso tiver não deixar agendar o serviço.
+    def clean(self):
+        limpahora = super().clean()
+        servicosMarcados = limpahora.get('servico')
+        hora = limpahora.get('horario')
+
+        if servicosMarcados and hora:
+            for servicos in servicosMarcados:
+                horarioIgual = self._meta.model.objects.filter(
+                    servico = servicos,
+                    horario = hora
+                )
+                if self.instance.pk:
+                    horarioIgual = horarioIgual.exclude(pk=self.instance.pk)
+
+                if horarioIgual.exists():
+                    raise forms.ValidationError(
+                        f"Serviço '{servicos.servico}' já está agendado para este horario {hora}"
+                    )
+        return limpahora
