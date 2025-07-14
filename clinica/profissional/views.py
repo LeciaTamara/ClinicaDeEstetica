@@ -115,14 +115,14 @@ def verProfissional (request):
 # Apagar profissional
 
 @login_required()
-def deletarContaProfissional(request):
+def deletarContaProfissional(request, username):
     #pega o profissional pelo o username
     apagarProfissional= get_object_or_404(Profissional, user__username =username)
   
     profissionalUser = apagarProfissional.user
     apagarProfissional.delete()
     profissionalUser.delete()
-    return redirect('indexProfissional')
+    return redirect(reverse('indexAdm'))
 
 
 #Redireciona para a pagina clinicaEstetica

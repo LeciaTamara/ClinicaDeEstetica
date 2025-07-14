@@ -45,9 +45,8 @@ def add_cliente(request):
     return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
 
 #Read com condição
-@login_required
 @permission_required('cliente.detail_cliente', raise_exception=True)
-def verPrfil(request, username):
+def verPerfil(request, username):
     cliente = Cliente.objects.get(user__username=username)
     userCliente = cliente.user
 
@@ -142,7 +141,6 @@ def mostrarCategoria():
         if servico:
             servicoPorCategoria[categoria] = servico
     return {'servicoPorCategoria': servicoPorCategoria}
-
 
 #alterar senha do cliente
 @permission_required('cliente.change_cliente', raise_exception=True)
