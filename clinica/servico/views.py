@@ -4,6 +4,7 @@ from servico.models import Servico, TipoServico
 from servico.forms import EditCategoriaForm, EditServicoForm, ServicoCategoriaForm, ServicoForm
 from django.db.models import Max
 from django.db.models import Subquery, OuterRef
+from django.urls import reverse
 
 def index(request):
     servicos = Servico.objects.all()
@@ -120,3 +121,7 @@ def deletarServico(request, id):
 
     servico.delete()
     return redirect('indexServico')
+
+#Redireciona para o painel de administrador
+def redirecionarParaAdministrador(request):
+    return redirect(reverse('indexAdm'))

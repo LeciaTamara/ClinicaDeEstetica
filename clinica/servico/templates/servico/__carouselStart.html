@@ -1,6 +1,4 @@
 {% load static %}
-<h2>Diagnóstico</h2>
-<p>{{ servicoPorCategoria }}</p>
 
 <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
    
@@ -8,8 +6,8 @@
     <ol class="carousel-indicators">
         <!--Nesse item da lista será utilizado o forloop.counter0 que funciona
             como um contador para exibir todas as categorias dos serviços-->
-            {% for categoria in servicoPorCategoria.items %}
-        <li data-bs-target="#carouselId" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+        {% for categoria in servicoPorCategoria.items %}
+                 <li data-bs-target="#carouselId" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
         {% endfor %}
     </ol>
     <div class="carousel-inner" role="listbox">

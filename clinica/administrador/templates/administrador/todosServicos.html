@@ -1,0 +1,70 @@
+{% extends 'indexService.html' %}
+
+{% block content %}
+
+    <div class="container-fluid pricing py-5" style="background: var(--bs-primary);">
+        <div class="container py-5">
+
+                {% if armazenaServico|length > 3 %}
+                <!-- 🔄 Exibir serviços em forma de carrossel -->
+                <div class="owl-carousel pricing-carousel">
+                {% for servico in armazenaServico %}
+                <div class="pricing-item {% if forloop.first %}active{% endif %}">
+                    <div class="rounded pricing-content">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
+                        <h1 class="display-4 mb-0">
+                        <small class="align-top text-muted" style="font-size: 22px;">R$</small>{{ servico.preco }}
+                        <small class="text-muted" style="font-size: 16px;">/mês</small>
+                        </h1>
+                        <img src="{{ servico.arquivo.url }}" class="img-thumbnail w-80 h-40" alt="Imagem">
+                        <div>
+                        <h5 class="text-primary text-uppercase mb-1">{{ servico.tipo }}</h5>
+                        <h5 class="text-primary text-uppercase mb-1">{{ servico.profissional }}</h5>
+                        <h5 class="text-primary text-uppercase mb-1">{{ servico.descrição }}</h5>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        {% for servicos in servico.servico.all %}
+                        <p><i class="fa fa-check text-primary me-2"></i>{{ servicos.servico }}</p>
+                        {% endfor %}
+                        <a href="/administrador/alterarServico/{{servico.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Serviço</a>
+                        <a href="/administrador/alterarCategoria/{{servico.id}}" class="btn btn-warning"><i class="bi bi-pencil-fill"></i> Alterar Categoria do Serviço</a></a>
+                        <a href="/administrador/deletarCategoria/{{servico.id}}" class="btn btn-danger"><i class="bi bi-trash"></i> Apagar Categoria do Serviço</a>
+                        <a href="/administrador/deletarServico/{{servico.id}}" class="btn btn-primary rounded-pill my-2 px-4">Apagar Serviço</a>
+                    </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+
+                {% elif armazenaServico|length >= 1 %}
+                        <!-- 📦 Exibir planos em cards se tiver até 3 -->
+                        <div class="row">
+                            {% for servico in verPlano %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="pricing-item h-100">
+                                            <div class="rounded pricing-content h-100 d-flex flex-column justify-content-between">
+                                                <div class="bg-light rounded-top border-3 border-bottom border-primary p-4">
+                                                    <h1 class="display-4 mb-0">
+                                                        <small class="text-muted" style="font-size: 22px;">R$</small>{{ plano.preco }}
+                                                        <small class="text-muted" style="font-size: 16px;">/mês</small>
+                                                    </h1>
+                                                    <h5 class="text-primary text-uppercase mt-2">{{ plano.tipo }}</h5>
+                                                </div>
+                                                <div class="p-4">
+                                                    {% for servico in plano.servico.all %}
+                                                    <p><i class="fa fa-check text-primary me-2"></i>{{ servico.servico }}</p>
+                                                    {% endfor %}
+                                                    <a href="#" class="btn btn-primary rounded-pill my-2 px-4">Solicitar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                        </div>
+                {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
