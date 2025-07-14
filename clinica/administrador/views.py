@@ -222,6 +222,6 @@ def deletarCategoria(request, id):
 @login_required
 def realizarLogout(request):
     logout(request)
-    return redirect('login')
+    return redirect('indexClinica')
 
 

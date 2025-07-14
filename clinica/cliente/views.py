@@ -134,4 +134,4 @@ def editSenha(request, username):
 @login_required
 def realizarLogout(request):
     logout(request)
-    return redirect('login')
+    return redirect('indexClinica')
