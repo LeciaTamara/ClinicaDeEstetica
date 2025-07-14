@@ -6,19 +6,18 @@ from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.contrib import messages
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
 #Read
-@login_required()
-@permission_required('cliente.view_cliente', raise_exception=True)
 def indexCliente(request):
     return render(request,'cliente/indexCliente.html')
 
 #Adicionar Cliente
-@permission_required('cliente.add_cliente', raise_exception=True)
+# @permission_required('cliente.add_cliente', raise_exception=True)
 def add_cliente(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = ClienteForm(request.POST or None)
@@ -28,6 +27,16 @@ def add_cliente(request):
         cliente.user = user_cliente
         cliente.identificador = 'cliente'
         cliente.save()
+
+    #Adiciona o usuário ao grupo cliente -----------------------
+
+        nomeGrupo = cliente.identificador
+        grupo, _ = Group.objects.get_or_create(name='Clientes')
+        user_cliente.groups.add(grupo)
+        print("Cliente promovido a cliente:", cliente.nome)
+
+    #-----------------------------------------------------------------
+
         return redirect('indexCliente')
     return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
 
@@ -119,3 +128,10 @@ def editSenha(request, username):
         else:
             messages.error(request, "Não é possivél alterar a senha de outro usuário")
             return redirect('indexCliente')
+        
+
+#realizar logout
+@login_required
+def realizarLogout(request):
+    logout(request)
+    return redirect('login')

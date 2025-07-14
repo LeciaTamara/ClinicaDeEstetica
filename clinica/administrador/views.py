@@ -13,14 +13,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from servico.utils import mostrarCategoria, mostrarMaisServicos, mostrarServico
 from django.urls import reverse
-from django.contrib.auth import get_user_model
-
+from django.contrib.auth import get_user_model, logout
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
-#Index de administrador
-@login_required()
-@permission_required('administrador.view_administrador', raise_exception=True)
+# #Index de administrador
+# @login_required()
+# @permission_required('administrador.view_administrador', raise_exception=True)
 def index (request):
     return render(request, 'administrador/indexAdministrador.html',)
 
@@ -45,17 +45,25 @@ def verCliente (request):
     clientes = Cliente.objects.select_related('user').all()
     return render(request, 'administrador/verClientes.html', {'clientes' : clientes})
 
-# Adicionar administrador
+#Adicionar administrador
 @permission_required('administrador.add_administrador', raise_exception=True)
 def add_administrador(request):
     form_user = AdicionarUsuarioForm(request.POST or None)
     form = AdministradorForm(request.POST or None)
     if form_user.is_valid() and form.is_valid():
-        user_administrador = form_user.save()
-        administrador = form.save(commit=False)
-        administrador.user = user_administrador
+        user_administrador = form_user.save() #Cria o usuário do model user
+        administrador = form.save(commit=False) #Criar o usuario do model Administrador
+        administrador.user = user_administrador #Associar o usuario User com o Administrador
         administrador.identificador = 'administrador'
         administrador.save()
+
+    #Adiciona o usuário ao grupo administrador -----------------------
+        nomeGrupo = administrador.identificador.capitalize() + 'es'
+        grupo = Group.objects.get(name=nomeGrupo)
+        user_administrador.groups.add(grupo)
+        print("Administrador promovido a admi:", administrador.nome)
+
+    #-----------------------------------------------------------------
         print("Administrador criado:", administrador.id)
 
         tornarAdmin(request, user_administrador.username)
@@ -139,6 +147,7 @@ def editSenha(request, username):
             return redirect('indexAdm')
 
 #Todos os serviços
+@permission_required('administrador.detailhes_administrador', raise_exception=True)
 def mostrarServicos(request):
     servicos = {}
     servicos.update(mostrarServico())
@@ -207,4 +216,12 @@ def deletarCategoria(request, id):
     categoria.delete()
 
     return ("indexAdm")
+
+
+#realizar logout
+@login_required
+def realizarLogout(request):
+    logout(request)
+    return redirect('login')
+
 

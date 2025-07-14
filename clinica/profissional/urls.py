@@ -9,4 +9,5 @@ urlpatterns = [
     path("editarDadosProfissional/", views.editarDadosProfissional, name="editarDadosProfissional"),
     path("verProfissional/", views.verProfissional, name="verProfissional"),
     path("redirecionaParaIndexClinica/", views.redirecionaParaIndexClinica, name = "redirecionaParaIndexClinica"),
+    path("logout/", views.realizarLogout, name="lougout"),
 ]

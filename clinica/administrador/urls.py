@@ -9,6 +9,7 @@ urlpatterns = [
     path("deletarAdministrador/<str:username>/", views.deletarContaAdmin, name="deletarAdministrador"),
     path('verAdministrador/', views.verAdministrador, name='verAdministrador'),
     path('alterarSenha/<str:username>/', views.editSenha, name="alterarSenha"),
+    path("logout/", views.realizarLogout, name="logout"),
     path('verServico/', views.mostrarServicos, name='verServico'),
     path('verProfissional/', views.verProfissional, name='verProfissional'),
     path('verCliente/', views.verCliente, name='verCliente'),

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model, logout
 from django.contrib import messages
 from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from profissional.models import Profissional
@@ -9,6 +9,7 @@ from profissional.forms import EditProfissionalForm, ProfissionalForm, SenhaForm
 from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
+
 @login_required()
 @permission_required('profissional.view_profissional', raise_exception=True)
 def index(request):
@@ -33,6 +34,16 @@ def add_profissional(request):
         profissional.user = user_profissional
         profissional.identificador = 'profissional'
         profissional.save()
+
+    #Adiciona o usuário ao grupo Profissional -----------------------
+
+        nomeGrupo = profissional.identificador
+        grupo, _ = Group.objects.get_or_create(name='Profissionais')
+        user_profissional.groups.add(grupo)
+        print("Profissional promovido a profissional:", profissional.nome)
+
+    #-----------------------------------------------------------------
+
         return redirect('indexProfissional')
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
@@ -119,3 +130,9 @@ def deletarContaProfissional(request):
 #Redireciona para a pagina clinicaEstetica
 def redirecionaParaIndexClinica(request):
     return redirect(reverse('indexClinica'))
+
+#realizar logout
+@login_required
+def realizarLogout(request):
+    logout(request)
+    return redirect('login')
