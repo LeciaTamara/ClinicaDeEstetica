@@ -46,13 +46,8 @@ def add_cliente(request):
     return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
 
 #Read com condição
-@login_required
-def verPerfil(request):
-    cliente = get_object_or_404(Cliente, user=request.user)
-    return render(request, 'cliente/verPerfil.html', {'cliente': cliente})
-
 @permission_required('cliente.detail_cliente', raise_exception=True)
-def verPrfil(request, username):
+def verPerfil(request, username):
     cliente = Cliente.objects.get(user__username=username)
     userCliente = cliente.user
 
@@ -184,4 +179,4 @@ def editSenha(request, username):
 @login_required
 def realizarLogout(request):
     logout(request)
-    return redirect('login')
+    return redirect('indexClinica')
