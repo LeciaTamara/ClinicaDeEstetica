@@ -35,44 +35,52 @@ def add_profissional(request):
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
 #alterar informações
-
 @login_required
-def editarDadosProfissional(request, username):
-    profissional = get_object_or_404(Profissional, user__username=username)
-    user = profissional.user
+def editarDadosProfissional(request):
+    user = request.user
+    profissional = get_object_or_404(Profissional, user=user)
     
-    editarUserForm = EditUsuarioForm(request.POST, instance=user)
-    editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
-
     if request.method == 'POST':
+        editarUserForm = EditUsuarioForm(request.POST, instance=user)
+        editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
+
         if editarUserForm.is_valid() and editarProfissionalForm.is_valid():
             editarUserForm.save()
             editarProfissionalForm.save()
-            return redirect('indexCliente')
+            return redirect('indexProfissional')
+    else:
+        editarUserForm = EditUsuarioForm(request.POST, instance=user)
+        editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
 
-    return render(request, 'cliente/ProfissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional} )
+        return render(request, 'profissional/profissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional} )
 
 
-# def alterarInformacao(request, id):
-#     #pega o id do usuário
-#     if request.method == 'GET':
-#         print('dados do usuário')
-#         profissionais = Profissional.objects.all()
-#         profissional = Profissional.objects.filter(pk=id).first()
-#         formProfissional = EditProfissionalForm(instance=profissional)
+#Ver Profissionais detalhes de profissionais
+@login_required()
+def verProfissional (request):
+    #pega o profissional pelo o username
+    user = request.user
+    profissional= Profissional.objects.get(user=user)
+    userProfissional = profissional.user
 
-#         return render(request, 'profissional/profissionalForm.html', {'formProfissional' :formProfissional, 'profissionais' :profissionais})
-#     #pega o usuário que foi capturado e atualiza os dados
-#     elif request.method == 'POST':
-#         print('método POST')
-#         profissionais = Profissional.objects.all()
-#         profissional = Profissional.objects.get(pk=id)
-#         formProfissional = EditProfissionalForm(request.POST, instance=profissional)
+    return render(request, 'profissional/verPerfil.html', {'user' : userProfissional, 'profissional' : profissional})
 
-#         #verifica o id do usuário
-#         if formProfissional.is_valid():
-#             formProfissional.save()
-#             return redirect('indexProfissional')
-#         else:
-#             profissionais = Profissional.objects.all()
-#             return render(request, 'profissional/profissionalForm.html')
+# Apagar profissional
+def deletarContaCliente(request, username):
+    apagarCliente = get_object_or_404(Cliente, user__username=username)
+
+    clienteUser = apagarCliente.user
+    apagarCliente.delete()
+    clienteUser.delete()
+    return redirect('indexClinica')
+
+@login_required()
+def deletarContaProfissional(request):
+    #pega o profissional pelo o username
+    user = request.user
+    profissional= get_object_or_404(Profissional, user = user)
+  
+    profissionalUser = profissional.user
+    profissional.delete()
+    profissionalUser.delete()
+    return redirect('indexProfissional')

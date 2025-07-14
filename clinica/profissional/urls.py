@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path("index/", views.index, name="indexProfissional"),
     path("criarProfissional/", views.add_profissional, name="criarProfissional"),
-   # path("mostrardetalhes/<str:username>/", views.mostrardetalhes, name="mostrardetalhes")
-    path("editarDadosProfissional/<str:username>/", views.alterarInformacao, name="alterarInformacao"),
+    path("deletarContaProfissional/", views.deletarContaProfissional, name="deletarContaProfissional"),
+    path("editarDadosProfissional/", views.editarDadosProfissional, name="editarDadosProfissional"),
+    path("verProfissional/", views.verProfissional, name="verProfissional"),
+
 ]
