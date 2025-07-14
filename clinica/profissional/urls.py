@@ -5,5 +5,5 @@ urlpatterns = [
     path("index/", views.index, name="indexProfissional"),
     path("criarProfissional/", views.add_profissional, name="criarProfissional"),
    # path("mostrardetalhes/<str:username>/", views.mostrardetalhes, name="mostrardetalhes")
-    path("alterarInformacao/<int:id>/", views.alterarInformacao, name="alterarInformacao"),
+    path("editarDadosProfissional/<str:username>/", views.alterarInformacao, name="alterarInformacao"),
 ]

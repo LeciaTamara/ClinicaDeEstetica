@@ -1,9 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from clinicaEstetica.forms import AdicionarUsuarioForm
+from clinicaEstetica.forms import AdicionarUsuarioForm, EditUsuarioForm
 from profissional.models import Profissional
 from profissional.forms import EditProfissionalForm, ProfissionalForm
 from django.contrib.auth.decorators import login_required
@@ -73,26 +73,43 @@ def add_profissional(request):
 
 #alterar informações
 
-def alterarInformacao(request, id):
-    #pega o id do usuário
-    if request.method == 'GET':
-        print('dados do usuário')
-        profissionais = Profissional.objects.all()
-        profissional = Profissional.objects.filter(pk=id).first()
-        formProfissional = EditProfissionalForm(instance=profissional)
+@login_required
+def editarDadosProfissional(request, username):
+    profissional = get_object_or_404(Profissional, user__username=username)
+    user = profissional.user
+    
+    editarUserForm = EditUsuarioForm(request.POST, instance=user)
+    editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
 
-        return render(request, 'profissional/profissionalForm.html', {'formProfissional' :formProfissional, 'profissionais' :profissionais})
-    #pega o usuário que foi capturado e atualiza os dados
-    elif request.method == 'POST':
-        print('método POST')
-        profissionais = Profissional.objects.all()
-        profissional = Profissional.objects.get(pk=id)
-        formProfissional = EditProfissionalForm(request.POST, instance=profissional)
+    if request.method == 'POST':
+        if editarUserForm.is_valid() and editarProfissionalForm.is_valid():
+            editarUserForm.save()
+            editarProfissionalForm.save()
+            return redirect('indexCliente')
 
-        #verifica o id do usuário
-        if formProfissional.is_valid():
-            formProfissional.save()
-            return redirect('indexProfissional')
-        else:
-            profissionais = Profissional.objects.all()
-            return render(request, 'profissional/profissionalForm.html')
+    return render(request, 'cliente/ProfissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional} )
+
+
+# def alterarInformacao(request, id):
+#     #pega o id do usuário
+#     if request.method == 'GET':
+#         print('dados do usuário')
+#         profissionais = Profissional.objects.all()
+#         profissional = Profissional.objects.filter(pk=id).first()
+#         formProfissional = EditProfissionalForm(instance=profissional)
+
+#         return render(request, 'profissional/profissionalForm.html', {'formProfissional' :formProfissional, 'profissionais' :profissionais})
+#     #pega o usuário que foi capturado e atualiza os dados
+#     elif request.method == 'POST':
+#         print('método POST')
+#         profissionais = Profissional.objects.all()
+#         profissional = Profissional.objects.get(pk=id)
+#         formProfissional = EditProfissionalForm(request.POST, instance=profissional)
+
+#         #verifica o id do usuário
+#         if formProfissional.is_valid():
+#             formProfissional.save()
+#             return redirect('indexProfissional')
+#         else:
+#             profissionais = Profissional.objects.all()
+#             return render(request, 'profissional/profissionalForm.html')
