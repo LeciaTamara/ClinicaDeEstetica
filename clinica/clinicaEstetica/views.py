@@ -89,7 +89,7 @@ def login_usuario(request):
         else:
             return redirect('login')  # fallback
 
-    return render(request, 'registration/login.html', {'loginForm': form})
+    return render(request, 'registration/login.html', {'form': form})
 
 #  #Login de acordo com o perfil do usuário       
 # @login_required 
