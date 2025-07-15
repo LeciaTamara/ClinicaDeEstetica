@@ -46,7 +46,7 @@ class ServicoForm(forms.ModelForm):
 
         widgets = {
             'servico': forms.TextInput(attrs={
-                'class': 'form-control py-3 border-white bg transparent text-black w-50', 'placeholder': 'Tipo'}),
+                'class': 'form-control py-3 border-white bg transparent text-black w-50', 'placeholder': 'Seviço'}),
 
             'preco': forms.NumberInput(attrs={
                 'class': 'form-control py border-white bg transparent text-black w-50', 'placeholder': 'Preco'}),

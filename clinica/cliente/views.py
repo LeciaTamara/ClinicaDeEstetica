@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from servico.models import TipoServico
-from django.contrib.auth import get_user_model, logout
+from django.contrib.auth import get_user_model, logout, authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import Group
 
@@ -31,7 +31,6 @@ def add_cliente(request):
         cliente.user = user_cliente
         cliente.identificador = 'cliente'
         cliente.save()
-        return redirect('verPerfil')
 
     #Adiciona o usuário ao grupo cliente -----------------------
 
@@ -41,9 +40,16 @@ def add_cliente(request):
         print("Cliente promovido a cliente:", cliente.nome)
 
     #-----------------------------------------------------------------
+        #Realizando a autenticação do cliente, após ele realizar o login
+        cliente_autenticado = authenticate(request, username=user_cliente.username, password=form_user.cleaned_data['password1']
+)
 
+
+        if cliente_autenticado:
+            login(request, cliente_autenticado)
+            print("autenticado:")
         return redirect('indexCliente')
-    return render(request, 'cliente/addClienteForm.html', {'form_user': form_user, 'form': form})
+    return render(request, 'cliente/criarContaForm.html', {'form_user': form_user, 'form': form})
 
 #Read com condição
 @permission_required('cliente.detail_cliente', raise_exception=True)
