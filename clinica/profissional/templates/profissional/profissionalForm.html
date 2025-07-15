@@ -4,14 +4,15 @@
 <a href="/administrador/index/" class="btn btn-light btn-sm">Voltar</a>
 <div class="d-flex justify-content-center align-items-center">
    
-    <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" id="formulario">
+    <form method="POST" action="" class="p-4 rounded shadow-sm" style="background-color:#FBCBF2" id="formulario">
+        
         {% csrf_token %}
         {{form_user}}
         {{form}}
         {{editarUserForm}}
         {{ editarProfissionalForm}}
 
-        <button type="submit">Salvar</button>
+        <button type="submit" style="background-color: #DBB8E3">Salvar</button>
     </form>
 
 </div>

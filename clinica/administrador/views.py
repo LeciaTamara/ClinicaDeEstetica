@@ -20,8 +20,8 @@ from django.contrib.auth.models import Group
 # Create your views here.
 
 # #Index de administrador
-# @login_required()
-# @permission_required('administrador.view_administrador', raise_exception=True)
+@login_required()
+@permission_required('administrador.view_administrador', raise_exception=True)
 def index (request):
     return render(request, 'administrador/indexAdministrador.html',)
 
@@ -69,11 +69,10 @@ def add_administrador(request):
         administrador.save()
 
     #Adiciona o usuário ao grupo administrador -----------------------
-        nomeGrupo = administrador.identificador.capitalize() + 'es'
-        grupo = Group.objects.get(name=nomeGrupo)
+        nomeGrupo = administrador.identificador
+        grupo, _ = Group.objects.get_or_create(name='Administradores')
         user_administrador.groups.add(grupo)
-        print("Administrador promovido a admi:", administrador.nome)
-
+        print("Administrador promovido a administrador:", administrador.nome)
     #-----------------------------------------------------------------
         print("Administrador criado:", administrador.id)
 
