@@ -44,7 +44,7 @@ def add_profissional(request):
 
     #-----------------------------------------------------------------
 
-        return redirect('indexProfissional')
+        return redirect(reverse('indexAdm'))
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
 #alterar informações
@@ -128,6 +128,7 @@ def deletarContaProfissional(request, username):
 #Redireciona para a pagina clinicaEstetica
 def redirecionaParaIndexClinica(request):
     return redirect(reverse('indexClinica'))
+
 
 #realizar logout
 @login_required
