@@ -44,7 +44,7 @@ def add_profissional(request):
 
     #-----------------------------------------------------------------
 
-        return redirect('indexProfissional')
+        return redirect(reverse('indexAdm'))
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
 #alterar informações
