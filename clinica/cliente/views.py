@@ -93,7 +93,6 @@ def deletarContaCliente(request, username):
 # Agendar Servico
 # EditUsuarioForm
 @login_required
-@permission_required('cliente.AgendarServico_cliente"', raise_exception=True)
 def marcarServico(request):
     formCliente = EditUsuarioForm(request.POST or None)
     formAgendaServico = AgendarServicoForm(request.POST or None)
