@@ -28,7 +28,7 @@
         <td>{{ profissional.user.email }}</td>
         <td>{{ profissional.nome }}</td>
         <td class="d-flex justify-content-between">
-            <a href="{% url 'deletarContaProfissional' profissional.user.username %}"><i class="bi bi-trash3-fill text-danger"></i></a>
+            <a href="{% url 'deletarProfissional' profissional.user.username %}"><i class="bi bi-trash3-fill text-danger"></i></a>
         </td>
       </tr>
       {% empty %}

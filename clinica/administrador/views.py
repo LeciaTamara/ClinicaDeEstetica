@@ -231,6 +231,17 @@ def deletarCategoria(request, id):
     return ("indexAdm")
 
 
+#DeletarProfissional
+@login_required()
+def deletarProfissional(request, username):
+    #pega o profissional pelo o username
+    apagarProfissional= get_object_or_404(Profissional, user__username =username)
+  
+    profissionalUser = apagarProfissional.user
+    apagarProfissional.delete()
+    profissionalUser.delete()
+    return redirect(reverse('indexAdm'))
+
 #realizar logout
 @login_required
 def realizarLogout(request):

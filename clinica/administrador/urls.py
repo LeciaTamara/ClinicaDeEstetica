@@ -19,6 +19,7 @@ urlpatterns = [
     path("redirecionaPlano/", views.redirecionaPlano, name="redirecionaPlano"),
     path("alterarCategoria/<int:id>/", views.alterarCategoria, name="alterarCategoria"),
     path("deletarCategoria/<int:id>/", views.deletarCategoria, name="deletarCategoria"),
-    path("verPlano/", views.verPlano, name="verPlano")
+    path("verPlano/", views.verPlano, name="verPlano"),
+    path("deletarProfissional/<str:username>/", views.deletarProfissional, name="deletarProfissional"),
     
 ]
