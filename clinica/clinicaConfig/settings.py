@@ -42,9 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'clinicaEstetica',
-    'administrador',
-    'cliente',
-    'profissional',
+    #'administrador',
+    'administrador.apps.AdministradorConfig',
+    #'cliente',
+    'cliente.apps.ClienteConfig',
+    # 'profissional',
+    'profissional.apps.ProfissionalConfig', # diz ao django qual app de configuração ele deve fazer a inicialiazação
     'servico',
     'plano',
 ]

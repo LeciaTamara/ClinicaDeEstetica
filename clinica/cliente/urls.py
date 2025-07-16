@@ -13,4 +13,6 @@ urlpatterns = [
     path('excluirConta/<str:username>/', views.deletarContaCliente, name='excluirConta'),
     path('marcarServico/', views.marcarServico, name='marcarServico'),
     path('mostrarCategoria/', views.mostrarCategoria, name='mostrarCategoria'),
+    path("redirecionaParaIndexClinica/", views.redirecionaParaIndexClinica, name = "redirecionaParaIndexClinica"),
+
 ]

@@ -3,13 +3,13 @@
 {% block content %}
 
 <div class="d-flex justify-content-center align-items-center m-3">
-    <form method="POST" action=""  class="p-4 bg-info rounded shadow-sm w-100 mb-3" id="formulario">
+    <form method="POST" action=""  class="p-4 rounded shadow-sm w-100 mb-3" style="background-color:#FBCBF2;" id="formulario">
         {% csrf_token %}
         <div class="mb-3">
              {{ formServico }}
         </div>
 
-        <button type="submit">Salvar</button>
+        <button type="submit" style="background-color: #DBB8E3">Salvar</button>
     </form>
 
 </div>

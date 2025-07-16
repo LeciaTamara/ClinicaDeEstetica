@@ -48,12 +48,14 @@ def add_profissional(request):
     return render(request, 'profissional/profissionalForm.html', {'form_user': form_user, 'form': form})
 
 #alterar informações
-@login_required
 @permission_required('profissional.change_profissional', raise_exception=True)
+
+
+@login_required
 def editarDadosProfissional(request):
     user = request.user
     profissional = get_object_or_404(Profissional, user=user)
-    
+
     if request.method == 'POST':
         editarUserForm = EditUsuarioForm(request.POST, instance=user)
         editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
@@ -62,13 +64,15 @@ def editarDadosProfissional(request):
             editarUserForm.save()
             editarProfissionalForm.save()
             return redirect('verProfissional')
-        
-        else:
-           editarUserForm = EditUsuarioForm(request.POST, instance=user)
-           editarProfissionalForm = EditProfissionalForm(request.POST, instance=profissional)
+    else:
+        editarUserForm = EditUsuarioForm(instance=user)
+        editarProfissionalForm = EditProfissionalForm(instance=profissional)
 
-           return render(request, 'profissional/profissionalForm.html', {'editarUserForm' : editarUserForm, 'editarProfissionalForm' : editarProfissionalForm, 'profissional' : profissional})
-        
+    return render(request, 'profissional/profissionalForm.html', {
+        'editarUserForm': editarUserForm,
+        'editarProfissionalForm': editarProfissionalForm,
+        'profissional': profissional
+    })        
 #Editar senha
 @permission_required('profissional.change_profissional', raise_exception=True)
 def editSenha(request, username):

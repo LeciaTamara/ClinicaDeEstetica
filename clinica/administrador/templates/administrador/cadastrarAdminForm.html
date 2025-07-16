@@ -4,7 +4,7 @@
 <a href="/administrador/index/" class="btn btn-light btn-sm">Voltar</a>
 <div class="d-flex justify-content-center align-items-center m-3">
     
-    <form method="POST" action="" class="p-4 bg-info rounded shadow-sm" style="background-color:#FBCBF2;" id="formulario">
+    <form method="POST" action="" class="p-4 rounded shadow-sm" style="background-color:#FBCBF2;" id="formulario">
         
         {% csrf_token %}
 
@@ -15,7 +15,7 @@
          {{editarUserForm}}
         {{editarAdministradorForm}}
     
-        <button type="submit">Salvar</button>
+        <button type="submit" style="background-color: #DBB8E3">Salvar</button>
     </form>
 </div>
 

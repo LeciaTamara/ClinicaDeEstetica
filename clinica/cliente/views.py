@@ -12,6 +12,7 @@ from servico.models import TipoServico
 from django.contrib.auth import get_user_model, logout, authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.urls import reverse
 
 # Create your views here.
 
@@ -186,3 +187,7 @@ def editSenha(request, username):
 def realizarLogout(request):
     logout(request)
     return redirect('indexClinica')
+
+#Redireciona para a pagina clinicaEstetica
+def redirecionaParaIndexClinica(request):
+    return redirect(reverse('indexClinica'))

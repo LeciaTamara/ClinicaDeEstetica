@@ -2,229 +2,59 @@
 {% block content %}
 <a href="/administrador/index/" class="btn btn-light btn-sm">Voltar</a>
 <div class="container-fluid pricing py-5" style="background: var(--bs-primary);">
-    <div class="container py-5">
-        <!-- Mostrar os serviços em forma de carroseul se a variavél verPlano for maior que 3 -->
-        {% if verPlano|length > 3 %}
-        <div class="owl-carousel pricing-carousel">
-            {% for plano in verPlano %}
-            <div class="pricing-item {% if forloop.first %} active {% endif %}">
-                <div class="rounded pricing-content">
-                    <div
-                        class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                        <h1 class="display-4 mb-0">
-                            <small class="align-top text-muted"
-                                style="font-size: 22px; line-height: 45px;">$</small>{{plano.preco}}<small
-                                class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
-                        </h1>
-                        <h5 class="text-primary text-uppercase m-0">{{plano.tipo}}</h5>
-                    </div>
-                    <div class="p-4">
-                        <!-- Mostrar tudo se servicos em plano.servico -->
-                        {% for servico in plano.servico.all %}
-                        <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="p-4">
-                    {% for servicos in servico.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{ servicos.servico }}</p>
-                    {% endfor %}
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                    <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-                
-                {% for plano in verPlano %}
-                    <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
+  <div class="container py-5">
+    {% if verPlano|length > 3 %}
+      <div class="owl-carousel pricing-carousel">
+        {% for plano in verPlano %}
+        <div class="pricing-item {% if forloop.first %} active {% endif %}">
+          <div class="rounded pricing-content">
+            <div class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
+              <h1 class="display-4 mb-0">
+                <small class="align-top text-muted" style="font-size: 22px; line-height: 45px;">$</small>{{ plano.preco }}
+                <small class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
+              </h1>
+              <h5 class="text-primary text-uppercase m-0">{{ plano.tipo }}</h5>
             </div>
+            <div class="p-4">
+              {% for servico in plano.servico.all %}
+              <p><i class="fa fa-check text-primary me-2"></i>{{ servico.servico }}</p>
+              {% endfor %}
+            </div>
+            <div class="p-4">
+              <a href="/plano/alterarPlano/{{ plano.id }}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+              <a href="/plano/deletarPlano/{{ plano.id }}" class="btn btn-danger rounded-pill my-2 px-4">Apagar plano</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      {% for plano in verPlano %}
+      <div class="pricing-item">
+        <div class="rounded pricing-content">
+          <div class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
+            <h1 class="display-4 mb-0">
+              <small class="align-top text-muted" style="font-size: 22px; line-height: 45px;">$</small>{{ plano.preco }}
+              <small class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
+            </h1>
+            <h5 class="text-primary text-uppercase m-0">{{ plano.tipo }}</h5>
+          </div>
+          <div class="p-4">
+            {% for servico in plano.servico.all %}
+            <p><i class="fa fa-check text-primary me-2"></i>{{ servico.servico }}</p>
             {% endfor %}
+          </div>
+          <div class="p-4">
+            <a href="/plano/alterarPlano/{{ plano.id }}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
+            <a href="/plano/deletarPlano/{{ plano.id }}" class="btn btn-danger rounded-pill my-2 px-4">Apagar plano</a>
+          </div>
         </div>
-        <!-- Mostrar os serviços sem ser em forma de carroseul se a variavél verPlano tiver 3 dados -->
-        {% elif verPlano|length == 3 %}
-        <div class="pricing-item">
-
-            <div class="rounded pricing-content">
-                <div
-                    class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                    <h1 class="display-4 mb-0">
-                        <small class="align-top text-muted"
-                            style="font-size: 22px; line-height: 45px;">$</small>{{verPlano.0.preco}}<small
-                            class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
-                    </h1>
-                    <h5 class="text-primary text-uppercase m-0">{{verPlano.0.tipo}}</h5>
-                </div>
-                <div class="p-4">
-                    <!-- Mostrar tudo se servicos em plano.servico -->
-                    {% for servico in verPlano.0.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                    {% endfor %}
-    
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-                
-                {% for plano in verPlano %}
-                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="pricing-item">
-
-            <div class="rounded pricing-content">
-                <div
-                    class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                    <h1 class="display-4 mb-0">
-                        <small class="align-top text-muted"
-                            style="font-size: 22px; line-height: 45px;">$</small>{{verPlano.1.preco}}<small
-                            class="text-muted" style="font-size: 16px; line-height: 40px;">/Mo</small>
-                    </h1>
-                    <h5 class="text-primary text-uppercase m-0">{{verPlano.1.tipo}}</h5>
-                </div>
-                <div class="p-4">
-                    <!-- Mostrar tudo se servicos em plano.servico -->
-                    {% for servico in verPlano.1.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                    {% endfor %}
-             
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-                
-                {% for plano in verPlano %}
-                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="pricing-item">
-
-            <div class="rounded pricing-content">
-                <div
-                    class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                    <h1 class="display-4 mb-0">
-                        <small class="align-top text-muted"
-                            style="font-size: 22px; line-height: 45px;">$</small>{{verPlano.2.preco}}<small
-                            class="text-muted" style="font-size: 16px; line-height: 40px;">/Mo</small>
-                    </h1>
-                    <h5 class="text-primary text-uppercase m-0">{{verPlano.2.tipo}}</h5>
-                </div>
-                <div class="p-4">
-                    <!-- Mostrar tudo se servicos em plano.servico -->
-                    {% for servico in verPlano.2.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                    {% endfor %}
-                    
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-                
-                {% for plano in verPlano %}
-                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
-            </div>
-        </div>
-        <!-- Mostrar os serviços sem ser em forma de carroseul se a variavél verPlano tiver 2 dados -->
-        {% elif verPlano|length == 2 %}
-        <div class="pricing-item">
-
-            <div class="rounded pricing-content">
-                <div
-                    class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                    <h1 class="display-4 mb-0">
-                        <small class="align-top text-muted"
-                            style="font-size: 22px; line-height: 45px;">$</small>{{verPlano.0.preco}}<small
-                            class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
-                    </h1>
-                    <h5 class="text-primary text-uppercase m-0">{{verPlano.0.tipo}}</h5>
-                </div>
-                <div class="p-4">
-                    <!-- Mostrar tudo se servicos em plano.servico -->
-                    {% for servico in verPlano.0.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                    {% endfor %}
-    
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-                
-                {% for plano in verPlano %}
-                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="pricing-item">
-
-            <div class="rounded pricing-content">
-                <div
-                    class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                    <h1 class="display-4 mb-0">
-                        <small class="align-top text-muted"
-                            style="font-size: 22px; line-height: 45px;">$</small>{{verPlano.1.preco}}<small
-                            class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
-                    </h1>
-                    <h5 class="text-primary text-uppercase m-0">{{verPlano.1.tipo}}</h5>
-                </div>
-                <div class="p-4">
-                    <!-- Mostrar tudo se servicos em plano.servico -->
-                    {% for servico in verPlano.1.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                    {% endfor %}
-                    
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-                
-                {% for plano in verPlano %}
-                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
-            </div>
-        </div>
-        <!-- Mostrar os serviços sem ser em forma de carroseul se a variavél verPlano tiver 1 dados -->
-        {% else %}
-        <div class="pricing-item">
-
-            <div class="rounded pricing-content">
-                <div
-                    class="d-flex flex-wrap align-items-center justify-content-between bg-light rounded-top border-3 border-bottom border-primary p-4">
-                    <h1 class="display-4 mb-0">
-                        <small class="align-top text-muted"
-                            style="font-size: 22px; line-height: 45px;">$</small>{{verPlano.0.preco}}<small
-                            class="text-muted" style="font-size: 16px; line-height: 40px;">/Mês</small>
-                    </h1>
-                    <h5 class="text-primary text-uppercase m-0">{{verPlano.0.tipo}}</h5>
-                </div>
-                <div class="p-4">
-                    <!-- Mostrar tudo se servicos em plano.servico -->
-                    {% for servico in verPlano.0.servico.all %}
-                    <p><i class="fa fa-check text-primary me-2"></i>{{servico.servico}}</p>
-                    {% endfor %}
-                </div>
-                <!--Pega o id correspondente do plano da interação-->
-                {% for plano in verPlano %}
-                <a href="/plano/alterarPlano/{{plano.id}}" class="btn btn-primary rounded-pill my-2 px-4">Alterar Plano</a>
-                {% endfor %}
-
-                {% for plano in verPlano %}
-                <a href="{% url 'deletarPlano' plano.id %}" class="btn btn-primary rounded-pill my-2 px-4">Apagar plano</a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
 </div>
+
 
 {% endblock %}

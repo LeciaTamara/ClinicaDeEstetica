@@ -52,10 +52,7 @@ def verCliente (request):
     clientes = Cliente.objects.select_related('user').all()
     return render(request, 'administrador/verClientes.html', {'clientes' : clientes})
 
-# @login_required
-# def verPlano(request):
-    
-# Adicionar administrador
+
 #Adicionar administrador
 @permission_required('administrador.add_administrador', raise_exception=True)
 def add_administrador(request):
