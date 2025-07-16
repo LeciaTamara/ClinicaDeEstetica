@@ -9,13 +9,13 @@ def configurar_grupos_e_permissoes():
             'change_cliente',
             'delete_cliente',
             'view_cliente',
-            'detail_cliente'
+            'detail_cliente',
             'add_cliente',
             'add_agendarservico',
             'change_agendarservico',
             'delete_agendarservico',
-            'view_agendarservico'
-            'podeagendarumservico_cliente'
+            'view_agendarservico',
+            'podeagendarumservico_cliente',
         ]
 
         permissoes = Permission.objects.filter(codename__in=permissoes_desejadas)

@@ -9,7 +9,7 @@ def configurar_grupos_e_permissoes():
             'change_profissional',
             'delete_profissional',
             'view_profissional',
-            'detail_profissional'
+            'detail_profissional',
         ]
 
         permissoes = Permission.objects.filter(codename__in=permissoes_desejadas)
