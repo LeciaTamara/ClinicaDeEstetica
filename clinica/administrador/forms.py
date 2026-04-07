@@ -2,7 +2,9 @@ from django import forms
 from django.db import models
 from django.contrib.auth.forms import UserCreationForm,  UserChangeForm
 from .models import Administrador
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 #Formulário para adicionar Administrador
 class AdministradorForm(forms.ModelForm):
     class Meta:
@@ -25,6 +27,7 @@ class EditAdmForm(forms.ModelForm):
         }
 
 #Formulário para alterar senha do administrador
+#Formulário para alterar senha do administrador
 class SenhaForm(UserChangeForm):
     password1 = forms.CharField(
         label='Senha',
@@ -35,7 +38,7 @@ class SenhaForm(UserChangeForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
     class Meta:
-        model = Administrador
+        model = User
         fields = ['password1', 'password2']
     
     def clean_password2(self):
@@ -46,9 +49,9 @@ class SenhaForm(UserChangeForm):
         return password2
     
     def save(self, commit=True):
-        administrador = super().save(commit=False)
-        administrador.user.set_password(self.cleaned_data['password1'])
-        administrador.user.save()
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        user.save()
         if commit:
-            administrador.save()
-        return administrador
+            user.save()
+        return user

@@ -10,7 +10,7 @@ class Profissional(models.Model):
     numTelefone =  models.IntegerField()
     salario = models.IntegerField()
     identificador = models.CharField(max_length=20, default='profissional')
-
+    
     class Meta:
         permissions = (
             ("detail_profissional","Pode ver detalhe do profissional "),
