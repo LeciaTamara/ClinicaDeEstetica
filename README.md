@@ -34,7 +34,7 @@ Nome de usuário: administrador
 Senha: 123Senha 
 
 \* Profissional :   
-Nome de usuário: profissional  
+Nome de usuário: profissional2  
 Senha: 123Senha 
 
 \* Cliente   
