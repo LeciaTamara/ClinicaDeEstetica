@@ -137,9 +137,11 @@ def editSenha(request, username):
                 return render(request, 'administrador/senhaForm.html', {'formSenha' : formSenha ,'administradores': administradores})
                 
             elif request.method == 'POST':
+                print('Entrando no POst')
                 administradores = User.objects.all()
                 administrador = Administrador.objects.get(user__username=username)
-                formSenha = SenhaForm(request.POST, instance=administrador)
+                user = administrador.user
+                formSenha = SenhaForm(request.POST, instance=user)
 
                 if formSenha.is_valid():
                     formSenha.save()
@@ -152,7 +154,6 @@ def editSenha(request, username):
         else:
             messages.error(request, "Não é possivél alterar a senha de outro usuário")
             return redirect('indexAdm')
-
 #Todos os serviços
 @permission_required('administrador.detailhes_administrador', raise_exception=True)
 def mostrarServicos(request):
